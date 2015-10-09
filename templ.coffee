@@ -3,16 +3,15 @@ xre = require "xregexp"
 # http://stackoverflow.com/questions/5367369/named-capturing-groups-in-javascript-regex
 `function namedRegexMatch(text, regex, matchNames) {
   var matches = regex.exec(text);
-  console.log(matches)
 
-  return matches.reduce(function(result, match, index) {
+  return matches ? matches.reduce(function(result, match, index) {
     if (index > 0)
       // This substraction is required because we count 
       // match indexes from 1, because 0 is the entire matched string
       result[matchNames[index - 1]] = match;
 
     return result;
-  }, {});
+  }, {}) : null;
 }`
 
 # a really basic templating language
@@ -41,12 +40,10 @@ exports.embed = (templ, opts={}) ->
 # string.
 exports.extract = (templ, opts={}) ->
   (data) ->
-    console.log "TEMPL:", templ
-    console.log "DATA:", data
-    console.log()
+    # console.log "TEMPL:", templ
+    # console.log "DATA:", data
+    # console.log()
 
-
-    #"what time is it in (?<where>.*)" -> "what time is it in {where}"
 
     names = templ.match(/\{[a-zA-Z0-9_]+\}/ig).map (m) ->
       # get the text within the match
@@ -65,4 +62,4 @@ exports.extract = (templ, opts={}) ->
 
 
 
-console.log exports.extract("what time is it in {where} at {time}") "what time is it in bla at time"
+# console.log exports.extract("what time is it in {where} at {time}") "what time is it in bla at time"
