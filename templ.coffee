@@ -1,9 +1,25 @@
+xre = require "xregexp"
+
+# http://stackoverflow.com/questions/5367369/named-capturing-groups-in-javascript-regex
+`function namedRegexMatch(text, regex, matchNames) {
+  var matches = regex.exec(text);
+  console.log(matches)
+
+  return matches.reduce(function(result, match, index) {
+    if (index > 0)
+      // This substraction is required because we count 
+      // match indexes from 1, because 0 is the entire matched string
+      result[matchNames[index - 1]] = match;
+
+    return result;
+  }, {});
+}`
 
 # a really basic templating language
 # replace what we want to replace with in {}
 # like: "this is a {test}" with data {test: "hello world"}
 # makes "this is a hello world"
-module.exports = (templ, opts={}) ->
+exports.embed = (templ, opts={}) ->
   (data) ->
     templ.match(/\{[a-zA-Z0-9_]+\}/ig).forEach (m) ->
       # get the text within the match
@@ -20,4 +36,33 @@ module.exports = (templ, opts={}) ->
       templ = "#{templ.slice(0, ind)}#{comp}#{templ.slice(ind+m.length)}"
     templ
 
-#console.log module.exports("ya, 1{test} {bla}")(test: "abc")
+
+# using the data inside of a template string, reverse it into a parameter
+# string.
+exports.extract = (templ, opts={}) ->
+  (data) ->
+    console.log "TEMPL:", templ
+    console.log "DATA:", data
+    console.log()
+
+
+    #"what time is it in (?<where>.*)" -> "what time is it in {where}"
+
+    names = templ.match(/\{[a-zA-Z0-9_]+\}/ig).map (m) ->
+      # get the text within the match
+      text = m.slice 1
+      text = text.slice 0, text.length-1
+
+      # get the location of this match in the string
+      ind = templ.indexOf m
+      templ = "#{templ.slice(0, ind)}(.*)#{templ.slice(ind+m.length)}"
+
+      # return the name
+      text
+
+    # search with a regex
+    namedRegexMatch data, new RegExp(templ, 'gi'), names
+
+
+
+console.log exports.extract("what time is it in {where} at {time}") "what time is it in bla at time"
