@@ -32,7 +32,7 @@ skills = [
     intent: "repeatNumberIntent"
     templ:
       num:
-        type: String
+        type: Number
     utterances: [
       "repeat {num}"
     ]
@@ -94,9 +94,7 @@ get_matching_skills = (text, skills) ->
     m.intent
 
 # test
-console.log get_matching_skills "what time is it in five", skills
+console.log get_matching_skills "what time is it in london", skills
+console.log get_matching_skills "time in london", skills
+console.log get_matching_skills "repeat five", skills
 
-
-
-# match the intent of a phrase
-# console.log templ.embed("bla {abc}")(abc: "def")
