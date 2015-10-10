@@ -21,7 +21,7 @@
         "intent": "getCurrentTimeAtLocationIntent",
         "templ": {
           "where": {
-            "type": "Number"
+            "type": "String"
           }
         },
         "utterances": [
