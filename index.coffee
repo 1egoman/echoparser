@@ -41,6 +41,14 @@ skills = [
 
 ]
 
+# Convert string representations of types inot the actual types
+for s in skills
+  for i in s.intents
+    for t in i.templ
+      if typeof t.type is "string"
+        t.type = eval t.type # TODO better way to do this?
+
+
 # given a skill and a phrase extract the data and the intent name
 extract_from_skill = (text, skill) ->
   # for each intent, test whether the specified string matches
@@ -95,6 +103,6 @@ get_matching_skills = (text, skills) ->
 
 # test
 console.log get_matching_skills "what time is it in london", skills
-console.log get_matching_skills "time in london", skills
+console.log get_matching_skills "time in paris", skills
 console.log get_matching_skills "repeat five", skills
 
