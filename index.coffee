@@ -1,4 +1,6 @@
 _ = require "underscore"
+text_to_num = require 'text-to-number'
+
 templ = require "./templ"
 
 skill =
@@ -6,8 +8,8 @@ skill =
   intents: [
     intent: "getCurrentTimeIntent"
     templ:
-      hours:
-        type: Number
+      where:
+        type: String
     utterances: [
       "what time is it in {where}"
     ]
@@ -28,7 +30,22 @@ extract_from_skill = (text, skill) ->
 
     if data
       name: int.intent
-      data: data
+      data: do (data) =>
+        # coerse all data types to their proper values
+        _.map int.templ, (v, k) =>
+
+          # a number, but in a textual format (like fifty five)
+          # this is converted back to its numerical representation (like 55)
+          if typeof v.type(1) is "number" and k of data and isNaN parseFloat data[k]
+            data[k] = text_to_num data[k]
+
+          # manual coersion (like Number('5') for example)
+          else if k of data
+            data[k] = v.type(data[k])
+
+          # not in the types list? remove it.
+          else delete data[k]
+        data
     else
       null
   
@@ -49,7 +66,7 @@ get_matching_skills = (text, skills) ->
     m.intent
 
 # test
-console.log get_matching_skills "what time is it in london", [skill]
+console.log get_matching_skills "what time is it in five", [skill]
 
 
 
