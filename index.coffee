@@ -3,17 +3,43 @@ text_to_num = require 'text-to-number'
 
 templ = require "./templ"
 
-skill =
+skills = [
+ {
   name: "time"
   intents: [
     intent: "getCurrentTimeIntent"
+    templ: {}
+    utterances: [
+      "what time is it"
+      "what is the time"
+    ]
+  ,
+    intent: "getCurrentTimeLocationIntent"
     templ:
       where:
         type: String
     utterances: [
       "what time is it in {where}"
+      "what is the time at {where}"
+      "time at {where}"
+      "time in {where}"
     ]
   ]
+},
+{
+  name: "repeat"
+  intents: [
+    intent: "repeatNumberIntent"
+    templ:
+      num:
+        type: String
+    utterances: [
+      "repeat {num}"
+    ]
+  ]
+}
+
+]
 
 # given a skill and a phrase extract the data and the intent name
 extract_from_skill = (text, skill) ->
@@ -28,7 +54,7 @@ extract_from_skill = (text, skill) ->
     .value()
 
 
-    if data
+    if data and Object.keys(data).length
       name: int.intent
       data: do (data) =>
         # coerse all data types to their proper values
@@ -49,15 +75,17 @@ extract_from_skill = (text, skill) ->
     else
       null
   
-  intents.length and intents[0] or null # return first element or null
+  intents.length and _.compact(intents)[0] or null # return first element or null
 
 
 # iterate through a list of skills and only parse the elements that match
 get_matching_skills = (text, skills) ->
-  matches = for s in skills
+  matches = _.compact(for s in skills
     if match = extract_from_skill text, s
       name: s.name
       intent: match
+  )
+
 
   # if there are no matches, then return null. Otherwise,
   # compose the intent and skill name together and return the whole thing.
@@ -66,7 +94,7 @@ get_matching_skills = (text, skills) ->
     m.intent
 
 # test
-console.log get_matching_skills "what time is it in five", [skill]
+console.log get_matching_skills "what time is it in five", skills
 
 
 

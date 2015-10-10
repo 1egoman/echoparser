@@ -45,7 +45,7 @@ exports.extract = (templ, opts={}) ->
     # console.log()
 
 
-    names = templ.match(/\{[a-zA-Z0-9_]+\}/ig).map (m) ->
+    names = (templ.match(/\{[a-zA-Z0-9_]+\}/ig) or []).map (m) ->
       # get the text within the match
       text = m.slice 1
       text = text.slice 0, text.length-1
