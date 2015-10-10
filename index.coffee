@@ -1,52 +1,14 @@
 _ = require "underscore"
 text_to_num = require 'text-to-number'
-
 templ = require "./templ"
-
-skills = [
- {
-  name: "time"
-  intents: [
-    intent: "getCurrentTimeIntent"
-    templ: {}
-    utterances: [
-      "what time is it"
-      "what is the time"
-    ]
-  ,
-    intent: "getCurrentTimeLocationIntent"
-    templ:
-      where:
-        type: String
-    utterances: [
-      "what time is it in {where}"
-      "what is the time at {where}"
-      "time at {where}"
-      "time in {where}"
-    ]
-  ]
-},
-{
-  name: "repeat"
-  intents: [
-    intent: "repeatNumberIntent"
-    templ:
-      num:
-        type: Number
-    utterances: [
-      "repeat {num}"
-    ]
-  ]
-}
-
-]
+skills = JSON.parse require("fs").readFileSync("./skills.json")
 
 # Convert string representations of types inot the actual types
 for s in skills
   for i in s.intents
-    for t in i.templ
-      if typeof t.type is "string"
-        t.type = eval t.type # TODO better way to do this?
+    for k,v of i.templ
+      if typeof v.type is "string"
+        v.type = eval v.type # TODO better way to do this?
 
 
 # given a skill and a phrase extract the data and the intent name
