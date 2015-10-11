@@ -8,6 +8,9 @@ querying the echo I think I've cracked it.
 
 Still a few unanswered questions though:
 - How does the echo do maths? (`alexa, one plus one`)
+  - (We can probably pipe through wolframalpha)
+- Home automation-y stuff
+  - We don't really need this in a proof of concept
 
 ## License
 Copyright (c) 2015 Ryan Gaus (1egoman)

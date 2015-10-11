@@ -3,7 +3,7 @@ text_to_num = require 'text-to-number'
 templ = require "./templ"
 skills = JSON.parse require("fs").readFileSync("./skills.json")
 
-# Convert string representations of types inot the actual types
+# Convert string representations of types into the actual types
 for s in skills
   for i in s.intents
     for k,v of i.templ
@@ -63,8 +63,22 @@ get_matching_skills = (text, skills) ->
     m.intent.name = "#{m.name}.#{m.intent.name}" # skill.intent
     m.intent
 
-# test
-console.log get_matching_skills "what time is it in london", skills
-console.log get_matching_skills "time in paris", skills
-console.log get_matching_skills "repeat five", skills
+# tell us that we'd like to respond to what the user said
+# this is a helper to make the responses look good and easy for uesers to
+# remember
+form_response = (status, text, end_session=false) ->
+  outputSpeech:
+    type: "PlainText"
+    text: text
+  shouldEndSession: end_session
+
+# run an example query
+match_skill = get_matching_skills "what time is it in london", skills
+switch match_skill.name
+
+  # give a list of the numbers starting at n and going down by one
+  when "repeat.repeatNumber"
+    phrase = [0..match_skill.data.n].join ', '
+    form_response true, phrase, true
+
 
