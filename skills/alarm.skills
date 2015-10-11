@@ -10,8 +10,8 @@ alarm.setAlarm
 
 alarm.setTimer
   set timer for {time}
-  set an timer at {time}
-  set an timer for {time}
+  set a timer at {time}
+  set a timer for {time}
   timer at {time}
   set timer {time}
   timer {time}

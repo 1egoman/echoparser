@@ -134,9 +134,17 @@ AbsoluteDirection = (word) ->
 # Date time parser
 # This is for a one-tim event, like 5:00pm
 chrono = require "chrono-node"
-When = (phrase) -> chrono.parseDate phrase
+When = (phrase) ->
+  if date = chrono.parseDate phrase
+    date
+  else
+    chrono.parseDate "in #{phrase}" # this makes the parser return a better result sometimes
 
 # Date time parser
 # This is for an event over a duration, like Sep 5-6
 # chrono = require "chrono-node"
-WhenDuration = (phrase) -> chrono.parse phrase
+WhenDuration = (phrase) ->
+  if date = chrono.parse phrase
+    date
+  else
+    chrono.parse "in #{phrase}" # this makes the parser return a better result sometimes
