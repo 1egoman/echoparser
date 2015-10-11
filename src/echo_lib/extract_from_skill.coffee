@@ -15,7 +15,7 @@ module.exports = (text, skill) ->
     .value()
 
 
-    if data and Object.keys(data).length
+    if data
       name: int.intent
       data: do (data) =>
         # coerse all data types to their proper values
