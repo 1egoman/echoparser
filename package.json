@@ -4,14 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "coffee src/index.coffee"
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "async": "^1.4.2",
+    "chrono-node": "^1.0.8",
     "ejs": "^2.3.4",
     "text-to-number": "0.0.0",
-    "underscore": "^1.8.3",
-    "xregexp": "^3.0.0"
+    "underscore": "^1.8.3"
   }
 }

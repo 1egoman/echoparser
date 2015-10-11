@@ -1,0 +1,160 @@
+audio.playMusicGeneral
+  play some music
+  play music
+  play some random music
+  play a random song
+  music
+  random music
+  random song
+  ---
+
+audio.playMusicDescriptor
+  play some {adj} music
+  play music that is {adj}
+  play {adj} music
+  play a {adj} song
+  play an {adj} song
+  music {adj}
+  {adj} music
+  {adj} song
+  ---
+  adj: String
+
+audio.playMusicArtist
+  play some music by {artist}
+  play some songs by {artist}
+  play a song by {artist}
+  play songs by {artist}
+  play music by {artist}
+  play tunes by {artist}
+  play tune by {artist}
+  play my {artist} station
+  play {artist} station
+  play {artist} songs
+  play {artist} music
+  play {artist} tune
+  {artist} music
+  {artist} songs
+  {artist} song
+  music by {artist}
+  songs by {artist}
+  song by {artist}
+  tunes by {artist}
+  tune by {artist}
+  ---
+  artist: String
+
+audio.addToPlaylist
+  add {name} to playlist
+  add {name} to playlist {playlist}
+  add {name} to my playlist
+  add {name} to my playlist {playlist}
+  {name} to playlist
+  {name} to my playlist
+  {name} to playlist {playlist}
+  {name} to my playlist {playlist}
+  add this to playlist
+  add this to my playlist
+  this to playlist
+  this song to my playlist
+  this song to playlist
+  add this song to playlist
+  add this song to my playlist
+  song to playlist
+  song to playlist {playlist}
+  this song to playlist
+  this song to playlist {playlist}
+  add this to playlist {playlist}
+  add this to my playlist {playlist}
+  this to playlist {playlist}
+  this song to my playlist {playlist}
+  this song to playlist {playlist}
+  add this song to playlist {playlist}
+  add this song to my playlist {playlist}
+  ---
+  name: String
+  playlist: String
+
+audio.playPlaylist
+  play playlist {playlist}
+  playlist {playlist}
+  {playlist} station
+  ---
+  playlist: String
+
+audio.playMusicName
+  play {name}
+  play a song {name}
+  play a song named {name}
+  play a song called {name}
+  play a song titled {name}
+  play song {name}
+  play song named {name}
+  play song called {name}
+  play song titled {name}
+  play music {name}
+  play music named {name}
+  play music called {name}
+  play music titled {name}
+  play tunes {name}
+  play tunes named {name}
+  play tunes called {name}
+  play tunes titled {name}
+  ---
+  name: String
+
+audio.playMusicNameArtist
+  play {name} by {artist}
+  play a song {name} by {artist}
+  play song {name} by {artist}
+  play music {name} by {artist}
+  play tunes {name} by {artist}
+  play tune {name} by {artist}
+  play {artist} station
+  play {artist} song {name}
+  play {artist} music {name}
+  play {artist} tune {name}
+  {artist} music
+  {artist} songs
+  {artist} song
+  {name} by {artist}
+  {name} songs by {artist}
+  {name} song by {artist}
+  {name} tunes by {artist}
+  {name} tune by {artist}
+  ---
+  name: String
+  artist: String
+
+audio.whatMusicPlaying
+  what is playing
+  what song is playing
+  what music is playing
+  what tune is playing
+  what's playing
+  what is playing right now
+  what song is playing right now
+  what music is playing right now
+  what tune is playing right now
+  what's playing right now
+  what is playing now
+  what song is playing now
+  what music is playing now
+  what tune is playing now
+  what's playing now
+  ---
+
+audio.playPodcastName
+  play program {name}
+  play the program {name}
+  play program {name}
+  play the program {name}
+  play a program {name}
+  play a program named {name}
+  play a program called {name}
+  play a program titled {name}
+  play a program named {name}
+  play a program called {name}
+  play a program titled {name}
+  ---
+  name: String

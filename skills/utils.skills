@@ -1,0 +1,38 @@
+utils.stop
+  stop
+  cancel
+  cease
+  halt
+  break
+  terminate
+  end
+  quit
+  shut up
+  ---
+
+utils.repeat
+  repeat
+  reiterate
+  say that again
+  again
+  another time
+  rerun
+  redo
+  ---
+
+utils.setVolumeAbsolute
+  volume {volume}
+  set volume {volume}
+  set volume to {volume}
+  ---
+  volume: Number
+
+utils.setVolumeRelative
+  volume {volume} {direction}
+  set volume {volume} {direction}
+  set volume {volume} {direction}
+  {direction} volume {volume}
+  ---
+  volume: Number
+  direction: OneDimensRelativeDirection
+

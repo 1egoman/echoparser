@@ -11,6 +11,9 @@ module.exports = (text, skills) ->
 
   # if there are no matches, then return null. Otherwise,
   # compose the intent and skill name together and return the whole thing.
-  matches.length is 0 and null or do (m=matches[0]) ->
-    m.intent.name = "#{m.name}.#{m.intent.name}" # skill.intent
-    m.intent
+  if matches.length is 0
+    null
+  else
+    do (m=matches[0]) ->
+      m.intent.name = "#{m.name}.#{m.intent.name}" # skill.intent
+      m.intent

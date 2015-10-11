@@ -1,18 +1,31 @@
 fs = require "fs"
+path = require "path"
+async = require "async"
 {EventEmitter} = require "events"
 
 class SkillList extends EventEmitter
 
-  constructor: (@skills_file="./skills.json") -> @pull()
+  constructor: (@skills_location="./skills") -> @pull()
 
   # read skills from file and let others know about it
   pull: =>
-    fs.readFile @skills_file, "UTF8", (err, data) =>
+    @_skills = []
+    fs.readdir @skills_location, (err, skill_files) =>
       if err
         @emit "error", err
       else
-        @_skills = @unpack_intent_types JSON.parse data
-        @emit "pull", @_skills
+        async.map skill_files.filter((f) -> f[0] isnt '.'), (skill, cb) =>
+          fs.readFile path.join(@skills_location, skill), "UTF8", (err, data) =>
+            if err
+              cb err
+            else
+              cb null, @unpack_intent_types @decode_skills data
+        , (err, skills) =>
+          if err
+            @emit "error", err
+          else
+            @_skills = skills.reduce (all, s) -> (all or []).concat s
+            @emit "pull", @_skills
 
   skills: => @_skills
 
@@ -26,6 +39,63 @@ class SkillList extends EventEmitter
           if typeof v.type is "string"
             v.type = eval v.type # TODO better way to do this?
     skills
+
+  # Convert skills format into JSON
+  # skill.intentName
+  #   utterance {foo}
+  #   ---
+  #   foo: String
+  decode_skills: (raw) ->
+    current_intent = null
+    in_templ = false
+    _skills = []
+
+    raw.split('\n').forEach (ln, index) =>
+      switch
+
+        # an intent definition
+        when match = ln.match /(.+)\.(.+)/
+          [_whole, skill, intent] = match
+          skill_match = _skills.filter((s) -> s.name is skill)
+
+          if skill_match.length is 0
+            # add new skill
+            _skills.push
+              name: skill
+              intents: [
+                intent: intent
+                utterances: []
+                templ: []
+              ]
+            current_intent = _skills[_skills.length-1].intents[0]
+            in_templ = false
+          else
+            # just add the intent
+            skill_match[0].intents.push
+              intent: intent
+              utterances: []
+              templ: []
+            current_intent = skill_match[0].intents[skill_match[0].intents.length-1]
+            in_templ = false
+
+
+        # switch from utterances to templates
+        when ln.match /[ ]+--[-]+/ then in_templ = true
+
+        # an utterance
+        when in_templ is false and match = ln.match /[  ]+(.*)/
+          [_whole, utterance] = match
+          current_intent.utterances.push utterance
+
+        # a template
+        when in_templ is true and match = ln.match /[ ]+(.*): ?(.*)/
+          [_whole, name, type] = match
+          current_intent.templ[name] = type: type
+
+    _skills
+
+
+
 
 module.exports = SkillList
 
@@ -60,3 +130,13 @@ AbsoluteDirection = (word) ->
     when word in ["east"] then "east"
     when word in ["west"] then "west"
     else null
+
+# Date time parser
+# This is for a one-tim event, like 5:00pm
+chrono = require "chrono-node"
+When = (phrase) -> chrono.parseDate phrase
+
+# Date time parser
+# This is for an event over a duration, like Sep 5-6
+# chrono = require "chrono-node"
+WhenDuration = (phrase) -> chrono.parse phrase

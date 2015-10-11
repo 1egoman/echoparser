@@ -1,0 +1,25 @@
+alarm.setAlarm
+  set alarm for {time}
+  set an alarm at {time}
+  set an alarm for {time}
+  alarm at {time}
+  set alarm {time}
+  alarm {time}
+  ---
+  time: When
+
+alarm.setTimer
+  set timer for {time}
+  set an timer at {time}
+  set an timer for {time}
+  timer at {time}
+  set timer {time}
+  timer {time}
+  ---
+  time: When
+
+alarm.snooze
+  snooze
+  snooze alarm
+  snooze timer
+  ---
