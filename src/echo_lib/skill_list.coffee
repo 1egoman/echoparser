@@ -28,3 +28,35 @@ class SkillList extends EventEmitter
     skills
 
 module.exports = SkillList
+
+# ------------------------------------------------------------------------------
+# Some Additional Skill Types
+# ------------------------------------------------------------------------------
+
+# Only for adjusting something up or down (along one axis)
+# responds to up, down, etc...
+OneDimensRelativeDirection = (word) ->
+  switch
+    when word in ["up", "top", "increase", "upward"] then "up"
+    when word in ["down", "bottom", "decrease", "downward"] then "down"
+    else null
+
+# Adjusting something in a 2 axis plane
+# responds to up, down, left, right, etc...
+RelativeDirection = (word) ->
+  switch
+    when word in ["up", "top", "increase", "upward"] then "up"
+    when word in ["down", "bottom", "decrease", "downward"] then "down"
+    when word in ["left", "bottom", "port", "leftward"] then "left"
+    when word in ["left", "bottom", "starboard", "rightward"] then "left"
+    else null
+
+# adjust something absolutely
+# responds to north, south, east, etc...
+AbsoluteDirection = (word) ->
+  switch
+    when word in ["north"] then "north"
+    when word in ["south"] then "south"
+    when word in ["east"] then "east"
+    when word in ["west"] then "west"
+    else null
