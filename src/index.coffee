@@ -67,13 +67,13 @@ app.post "/api/v1/intent/:id", (req, res) ->
 
     # find the intent
     match_skill = EchoLib.get_matching_skills req.body.phrase, skills
-    interaction.emit "intent", match_skill
 
     # wait for a response and go with it
-    # FIXME for some reason this isn't being called?
-    console.log interaction
-    interaction.once "intent_response", (intent) ->
+    interaction.once "intent_response", (resp) ->
       res.send interaction.format_intent resp
+
+    # send the intent to the interaction
+    interaction.emit "intent", match_skill
 
 
 PORT = process.env.PORT or 7000

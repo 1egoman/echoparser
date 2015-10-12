@@ -26,7 +26,6 @@ module.exports = class Interaction extends EventEmitter
         direction: "outgoing"
         datestamp: new Date()
         intent: intent
-      @intent_response and @intent_response intent
 
     @on "intent", (intent) ->
       @intents.push
