@@ -19,7 +19,7 @@ exports.playMusicName = (interaction, intent) ->
 
 
 # play something
-exports.playMusicName new Interaction,
-  name: 'audio.playMusicName'
-  data:
-    name: "stuff you should know"
+# exports.playMusicName new Interaction,
+#   name: 'audio.playMusicName'
+#   data:
+#     name: "stuff you should know"

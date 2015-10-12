@@ -1,4 +1,6 @@
 {EventEmitter} = require "events"
+uuid = require "uuid"
+chalk = require "chalk"
 
 # ------------------------------------------------------------------------------
 # An interaction is the basic building block of communication.
@@ -15,7 +17,24 @@
 # ------------------------------------------------------------------------------
 module.exports = class Interaction extends EventEmitter
 
-  constructor: -> @DEBUG = true
+  constructor: ->
+    @id = uuid.v4()
+    @intents = []
+
+    @on "intent_response", (intent) ->
+      @intents.push
+        direction: "outgoing"
+        datestamp: new Date()
+        intent: intent
+      @intent_response and @intent_response intent
+
+    @on "intent", (intent) ->
+      @intents.push
+        direction: "incoming"
+        datestamp: new Date()
+        intent: intent
+
+    @DEBUG = true
 
   # tell us that we'd like to respond to what the user said
   # this is a helper to make the responses look good and easy for uesers to
@@ -41,10 +60,18 @@ module.exports = class Interaction extends EventEmitter
   await_response: (opts={}, callback) ->
     @once "intent", (data) -> callback null, data
 
+  format_intent: (intent) ->
+    # add interaction id to the response
+    intent.interactionId = @id
+    intent
+
   # debug logging
   emit: ->
     if @DEBUG
-      console.log.apply console, ["->"].concat Array.prototype.slice.apply arguments
+      console.log.apply console, [
+        chalk.cyan @id,
+        chalk.reset "->"
+      ].concat Array.prototype.slice.apply arguments
     super
 
   # on: ->
