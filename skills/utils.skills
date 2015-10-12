@@ -36,3 +36,17 @@ utils.setVolumeRelative
   volume: Number
   direction: OneDimensRelativeDirection
 
+utils.yes
+  yes
+  sure
+  true
+  acknowlege
+  yep
+  ---
+
+utils.no
+  no
+  nope
+  not
+  never
+  ---
