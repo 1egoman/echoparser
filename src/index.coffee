@@ -39,8 +39,11 @@ app.post "/api/v1/intent", (req, res) ->
     interaction.emit "intent", match_skill
 
     # do the action
-    # TODO how do we take intent -> function?
-    audio.playMusicName interaction, match_skill
+    # look in intent_handles for the correctly named skill file
+    # and then get the intent from inside
+    skill_module = require "./intent_handlers/#{match_skill.name.split('.')[0]}"
+    intent_module = skill_module[match_skill.name.split('.')[1]]
+    intent_module interaction, match_skill
 
     # wait for a response and go with it
     interaction.once "intent_response", (resp) ->
@@ -70,6 +73,13 @@ app.post "/api/v1/intent/:id", (req, res) ->
 
     # wait for a response and go with it
     interaction.once "intent_response", (resp) ->
+ 
+      # is the interaction complete?
+      # clear it from the buffer then.
+      if resp.shouldEndSession
+        interaction_container = _.without interaction_container, interaction
+
+      # send it out
       res.send interaction.format_intent resp
 
     # send the intent to the interaction
