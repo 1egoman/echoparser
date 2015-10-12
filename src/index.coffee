@@ -19,13 +19,4 @@ form_response = (status, text, end_session=false) ->
 # run an example query
 skills_emitter.on "pull", (skills) ->
   match_skill = EchoLib.get_matching_skills "set a timer for 10 minutes", skills
-  console.log "SKILL", match_skill
-
-  # switch match_skill.name
-  #
-  #   # give a list of the numbers starting at n and going down by one
-  #   when "repeat.repeatNumber"
-  #     phrase = [0..match_skill.data.n].join ', '
-  #     console.log form_response true, phrase, true
-  #
-  #
+  console.log match_skill

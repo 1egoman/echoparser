@@ -13,6 +13,8 @@
     "async": "^1.4.2",
     "chrono-node": "^1.0.8",
     "ejs": "^2.3.4",
+    "request": "^2.65.0",
+    "spotify-web-api-node": "^2.1.0",
     "text-to-number": "0.0.0",
     "underscore": "^1.8.3"
   }
