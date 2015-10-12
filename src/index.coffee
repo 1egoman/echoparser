@@ -18,7 +18,7 @@ form_response = (status, text, end_session=false) ->
 
 # run an example query
 skills_emitter.on "pull", (skills) ->
-  match_skill = EchoLib.get_matching_skills "what time is it", skills
+  match_skill = EchoLib.get_matching_skills "what time is it in london", skills
   console.log "SKILL", match_skill
 
   # switch match_skill.name
