@@ -17,6 +17,10 @@ module.exports = (text, skill) ->
 
     if data
       name: int.intent
+
+      # a total workaround, but if something is in the utils skill then it's
+      # global. (if it's said the context will switch to its skill from anywhere)
+      flags: if int.intent.indexOf("util") is 0 then global: true else []
       data: do (data) =>
         # coerse all data types to their proper values
         _.mapObject int.templ, (v, k) =>

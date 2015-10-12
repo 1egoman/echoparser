@@ -20,6 +20,14 @@ app.get "/", (req, res) -> res.send "Hello World!"
 # a list of all interactions happening
 interaction_container = []
 
+# get the code that is behind an intent
+# look in intent_handles for the correctly named skill file
+# and then get the intent from inside
+get_intent_fn = (match_skill) ->
+    skill_module = require "./intent_handlers/#{match_skill.name.split('.')[0]}"
+    skill_module[match_skill.name.split('.')[1]]
+
+
 
 
 
@@ -41,13 +49,15 @@ app.post "/api/v1/intent", (req, res) ->
     # do the action
     # look in intent_handles for the correctly named skill file
     # and then get the intent from inside
-    skill_module = require "./intent_handlers/#{match_skill.name.split('.')[0]}"
-    intent_module = skill_module[match_skill.name.split('.')[1]]
-    intent_module interaction, match_skill
+    intent_module = get_intent_fn match_skill
 
     # wait for a response and go with it
     interaction.once "intent_response", (resp) ->
       res.send interaction.format_intent resp
+
+    # run the intent
+    intent_module interaction, match_skill
+
 
 
 
@@ -73,17 +83,22 @@ app.post "/api/v1/intent/:id", (req, res) ->
 
     # wait for a response and go with it
     interaction.once "intent_response", (resp) ->
- 
       # is the interaction complete?
       # clear it from the buffer then.
       if resp.shouldEndSession
         interaction_container = _.without interaction_container, interaction
-
       # send it out
       res.send interaction.format_intent resp
 
-    # send the intent to the interaction
-    interaction.emit "intent", match_skill
+    # how should we handle the event?
+    # if it's a global event, then call that skill and don't continue with the
+    # current one.
+    if match_skill.flags?.global?
+      intent_module = get_intent_fn match_skill
+      intent_module interaction, match_skill
+    else
+      # send the intent to the interaction
+      interaction.emit "intent", match_skill
 
 
 PORT = process.env.PORT or 7000
