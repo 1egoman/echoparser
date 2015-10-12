@@ -1,6 +1,8 @@
 {EventEmitter} = require "events"
 uuid = require "uuid"
 chalk = require "chalk"
+_ = require "underscore"
+wolfram = require("wolfram").createClient process.env.WOLFRAM_APP_KEY
 
 # ------------------------------------------------------------------------------
 # An interaction is the basic building block of communication.
@@ -35,6 +37,10 @@ module.exports = class Interaction extends EventEmitter
 
     @DEBUG = true
 
+  # ------------------------------------------------------------------------------
+  # Methods to respond to an intent with
+  # ------------------------------------------------------------------------------
+
   # tell us that we'd like to respond to what the user said
   # this is a helper to make the responses look good and easy for uesers to
   # remember.
@@ -62,10 +68,28 @@ module.exports = class Interaction extends EventEmitter
   await_response: (opts={}, callback) ->
     @once "intent", (data) -> callback null, data
 
+  # format an intent to be sent out as a json object
   format_intent: (intent) ->
     # add interaction id to the response
     intent.interactionId = @id
     intent
+
+  # pass the query on to wolfram alpha
+  search_wolfram: (phrase, callback) ->
+    # wolfram parsing function
+    parse_wolfram_results = (results) ->
+      pod = _.find results, (i) -> i.title is "Result"
+      if pod
+        pod.subpods[0].value
+
+    wolfram.query phrase, (err, result) =>
+      if callback
+        # just send the data back to the user
+        callback err, parse_wolfram_results(result), result
+      else if not err
+        @form_response true, parse_wolfram_results result
+      else
+        @form_response true, "Wolfram Alpha errored: #{err}"
 
   # debug logging
   emit: ->

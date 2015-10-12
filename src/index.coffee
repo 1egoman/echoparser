@@ -56,7 +56,10 @@ app.post "/api/v1/intent", (req, res) ->
       res.send interaction.format_intent resp
 
     # run the intent
-    intent_module interaction, match_skill
+    if intent_module
+      intent_module interaction, match_skill
+    else
+      interaction.form_response false, "The intent #{match_skill.name} has no handler."
 
 
 

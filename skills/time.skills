@@ -14,6 +14,13 @@ time.getCurrentTimeAtLocation
   what is the time in {where}
   what is the now in {where}
   what is the time now in {where}
+  what time is it on {where}
+  what time is it right now on {where}
+  time right now on {where}
+  time on {where}
+  what is the time on {where}
+  what is the now on {where}
+  what is the time now on {where}
   ---
   type: String
 
