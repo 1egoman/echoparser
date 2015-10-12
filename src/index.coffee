@@ -94,6 +94,7 @@ app.post "/api/v1/intent/:id", (req, res) ->
     # if it's a global event, then call that skill and don't continue with the
     # current one.
     if match_skill.flags?.global?
+      console.log "running global #{match_skill.name}..."
       intent_module = get_intent_fn match_skill
       intent_module interaction, match_skill
     else

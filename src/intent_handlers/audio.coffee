@@ -12,7 +12,7 @@ exports.playMusicName = (interaction, intent) ->
     "Play #{tracks[0].name} by #{tracks[0].artists[0].name}?", false
 
     interaction.await_response {}, (err, response) ->
-      if response.name is "utils.yes"
+      if response.name is "responses.yes"
         interaction.form_response true, "Playing #{tracks[0].name}...", true
       else
         interaction.end_response()

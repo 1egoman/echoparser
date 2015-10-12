@@ -55,6 +55,9 @@ module.exports = class Interaction extends EventEmitter
       outputSpeech: null
       shouldEndSession: true
 
+  # a raw response
+  raw_response: (data) -> @emit "intent_response", data
+
   # wait for a new intent and feed it to whoever asks
   await_response: (opts={}, callback) ->
     @once "intent", (data) -> callback null, data

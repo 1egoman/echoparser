@@ -12,12 +12,17 @@ utils.stop
 
 utils.repeat
   repeat
+  repeat that
   reiterate
+  reiterate that
   say that again
   again
+  say that again
   another time
   rerun
   redo
+  say again
+  repeat yourself
   ---
 
 utils.setVolumeAbsolute
@@ -35,18 +40,3 @@ utils.setVolumeRelative
   ---
   volume: Number
   direction: OneDimensRelativeDirection
-
-utils.yes
-  yes
-  sure
-  true
-  acknowlege
-  yep
-  ---
-
-utils.no
-  no
-  nope
-  not
-  never
-  ---
