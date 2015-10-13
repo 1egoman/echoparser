@@ -74,7 +74,9 @@ module.exports = class Interaction extends EventEmitter
     intent.interactionId = @id
     intent
 
+  # ------------------------------------------------------------------------------
   # pass the query on to wolfram alpha
+  # ------------------------------------------------------------------------------
   search_wolfram: (phrase, callback) ->
     # wolfram parsing function
     parse_wolfram_results = (results) ->
@@ -90,6 +92,23 @@ module.exports = class Interaction extends EventEmitter
         @form_response true, parse_wolfram_results result
       else
         @form_response true, "Wolfram Alpha errored: #{err}"
+
+
+  # ------------------------------------------------------------------------------
+  # Stream an audio link to a device
+  # This is played in the background and can be controlled with standard audio
+  # actions.
+  # ------------------------------------------------------------------------------
+  audio_response: (status, audio_url, text=null) ->
+    @raw_response
+      outputSpeach: (if text
+        type: "PlainText"
+        text: text
+      else undefined)
+      outputAudio:
+        type: "AudioLink"
+        src: audio_url
+      shouldEndSession: false
 
   # debug logging
   emit: ->
