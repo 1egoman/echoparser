@@ -19,7 +19,6 @@ exports.playMusicName = (interaction, intent) ->
 
 # serch for the phrase specified and find a matching track
 exports.playMusicArtist = (interaction, intent) ->
-  console.log 1
 
   # get artist details
   spotify.searchArtists(intent.data.artist, limit: 1).then (data) ->
@@ -34,16 +33,20 @@ exports.playMusicArtist = (interaction, intent) ->
         interaction.audio_playlist_response true, tracks, \
           "I've assembled a playlist of #{artist.name}. Play it?"
 
-      interaction.await_response {}, (err, response) ->
-        console.log err, response
-        if response.name is "responses.yes"
-          interaction.raw_response
-            outputSpeach:
-              text: "Ok"
-            actions: [name: "play.media"]
-            shouldEndSession: true
-        else
-          interaction.end_response()
+        # wait for the user confirmation
+        interaction.await_response {}, (err, response) ->
+          console.log err, response
+
+          # play it
+          if response.name is "responses.yes"
+            interaction.raw_response
+              outputSpeach:
+                type: "PlainText"
+                text: "Ok"
+              actions: [name: "play.media"]
+              shouldEndSession: true
+          else
+            interaction.end_response()
 
 
 
