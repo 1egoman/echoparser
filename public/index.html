@@ -1,34 +1,7 @@
 <html>
   <head>
     <title>echoparser gui</title>
-
-    <style>
-      * {padding: 0px; margin: 0px;}
-      h1,h2,h3,h4,h5,h6,p,a,span,button,input,li {
-        font-family: Helvetica, Arial, sans-serif;
-      }
-      input[type=text], button {
-        width: 100%;
-        margin-top: 5px;
-        padding: 3px;
-      }
-      ul li {
-        padding: 20px 0px;
-        list-style: none;
-      }
-      ul li.eoi {
-        background: goldenrod;
-        color: #fff;
-        text-align: center;
-        padding: 6px;
-      }
-      button.partway {
-        width: 20%;
-        display: inline;
-      }
-      button.partway.right { float: right; }
-    </style>
-
+    <link rel="stylesheet" type="text/css" href="style.css"/>
   </head>
   <body style="max-width: 500px; margin: 0px auto; padding: 20px;">
 
@@ -42,44 +15,6 @@
     <ul class="intents"></ul>
 
     <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-    <script>
-
-    $(document).ready(function() {
-      $(".query-box").val(localStorage.phrase || '')
-    })
-
-    var interactionId = null;
-    var query = function(phrase, store) {
-      if (localStorage && store !== false) localStorage.phrase = phrase
-
-      // query the server
-      $.ajax({
-        type: "POST",
-        url: "/api/v1/intent/"+(interactionId ? interactionId : ''),
-        data: JSON.stringify({phrase: phrase}),
-        headers: {"content-type": "application/json"},
-        success: function(data) {
-          // store interaction location
-          interactionId = data.interactionId
-
-          // format list item
-          listItem = "<li>"
-          if (data.outputSpeach && data.outputSpeach.type === "PlainText") {
-            listItem += "<h4>"+data.outputSpeach.text+"</h4>"
-          }
-          listItem += "<pre>"+JSON.stringify(data, null, 2)+"</pre>"
-
-          // add as another item
-          $("ul.intents").append(listItem+"</li>");
-
-          // at the end of the interaction? Mention that too.
-          if (data.shouldEndSession) {
-            $("ul.intents").append("<li class='eoi'>End of Interaction</li>");
-            interactionId = null
-          }
-        }
-      })
-    }
-    </script>
+    <script src="app.js"></script>
   </body>
 </html>
