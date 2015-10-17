@@ -110,6 +110,29 @@ module.exports = class Interaction extends EventEmitter
         src: audio_url
       shouldEndSession: end_session
 
+  # ----------------------------------------------------------------------------
+  # Stream a list of media to a device
+  # This is played in the background and can be controlled with standard audio
+  # actions. A playlist is an array of objects where each object has the key
+  # "name", "artist", and "src" at minimum.
+  # ----------------------------------------------------------------------------
+  audio_playlist_response: (status, audio_playlist, text=null, end_session=false) ->
+    @raw_response
+      outputSpeach: (if text
+        type: "PlainText"
+        text: text
+      else undefined)
+      outputAudio:
+        type: "AudioLinkPlaylist"
+        playlist: do (audio_playlist) =>
+          results = []
+          audio_playlist.forEach (p) =>
+            if p.name and p.src
+              results.push p
+          results
+      shouldEndSession: end_session
+
+
   # debug logging
   emit: ->
     if @DEBUG

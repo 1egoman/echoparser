@@ -64,7 +64,7 @@ exports.extract = (templ, opts={}) ->
       text
 
     # search with a regex
-    namedRegexMatch data, new RegExp(templ, 'gi'), names
+    namedRegexMatch data, new RegExp("^#{templ}$", 'gi'), names
 
 
 
