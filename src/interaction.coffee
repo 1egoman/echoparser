@@ -99,15 +99,14 @@ module.exports = class Interaction extends EventEmitter
   # This is played in the background and can be controlled with standard audio
   # actions.
   # ----------------------------------------------------------------------------
-  audio_response: (status, audio_url, text=null, end_session=false) ->
+  audio_response: (status, audio_data, text=null, end_session=false) ->
+    audio_data.type = "AudioLink"
     @raw_response
       outputSpeach: (if text
         type: "PlainText"
         text: text
       else undefined)
-      outputAudio:
-        type: "AudioLink"
-        src: audio_url
+      outputAudio: audio_data
       shouldEndSession: end_session
 
   # ----------------------------------------------------------------------------
