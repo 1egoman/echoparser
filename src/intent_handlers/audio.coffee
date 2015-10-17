@@ -4,7 +4,8 @@ Spotify = require "spotify-web-api-node"
 spotify = new Spotify
 
 base64 = require "base-64"
-require("request")
+request = require("request")
+request
   method: 'POST'
   url: 'https://accounts.spotify.com/api/token'
   headers:
@@ -18,20 +19,35 @@ require("request")
     console.log "-> Authorized Spotify."
   else
     console.log err
+
+# get play a random track
+exports.playMusicGeneral = (interaction, intent) ->
+  interaction.form_response true, "Not implemented.", true
+
+# get a track to play from an adjective
+exports.playMusicDescriptor = (interaction, intent) ->
+  interaction.form_response true, "Not implemented.", true
+
+
+# search for the phrase specified and find a matching track
 exports.playMusicName = (interaction, intent) ->
   spotify.searchTracks(intent.data.name, limit: 1).then (data) ->
-    tracks = data.body.tracks.items
+    if tracks = data.body.tracks.items
 
-    interaction.form_response true, \
-    "Play #{tracks[0].name} by #{tracks[0].artists[0].name}?", false
+      interaction.form_response true, \
+      "Play #{tracks[0].name} by #{tracks[0].artists[0].name}?"
 
-    interaction.await_response {}, (err, response) ->
-      if response.name is "responses.yes"
-        interaction.form_response true, "Playing #{tracks[0].name}...", true
-      else
-        interaction.end_response()
+      interaction.await_response {}, (err, response) ->
+        if response.name is "responses.yes"
+          interaction.audio_response true, tracks[0], "Playing #{tracks[0].name}...", true
+        else
+          interaction.end_response()
+    else
+      interaction.form_response true, "Couldn't find anything like that.", true
 
-# serch for the phrase specified and find a matching track
+
+
+# search for the phrase specified and find a matching track
 exports.playMusicArtist = (interaction, intent) ->
 
   # get artist details
@@ -49,7 +65,6 @@ exports.playMusicArtist = (interaction, intent) ->
 
         # wait for the user confirmation
         interaction.await_response {}, (err, response) ->
-          console.log err, response
 
           # play it
           if response.name is "responses.yes"
@@ -62,7 +77,16 @@ exports.playMusicArtist = (interaction, intent) ->
           else
             interaction.end_response()
 
+    else
+      interaction.form_response true, "Couldn't find anything like that.", true
 
+
+exports.playPlaylist = (interaction, intent) ->
+  spotify.searchPlaylists(intent.data.playlist).then (data) ->
+    if playlist = data.body.playlists.items[0]
+      interaction.form_response true, "Not Implemented. Later, we'll play #{playlist.name}.", true
+    else
+      interaction.form_response true, "No such playlist exists", true
 
 # play something
 # exports.playMusicName new Interaction,
