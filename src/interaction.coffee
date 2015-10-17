@@ -50,7 +50,7 @@ module.exports = class Interaction extends EventEmitter
   # response.
   form_response: (status, text, end_session=false) ->
     @emit "intent_response",
-      outputSpeech:
+      outputSpeach:
         type: "PlainText"
         text: text
       shouldEndSession: end_session
@@ -58,7 +58,7 @@ module.exports = class Interaction extends EventEmitter
   # just end the interaction with no response back
   end_response: ->
     @emit "intent_response",
-      outputSpeech: null
+      outputSpeach: null
       shouldEndSession: true
 
   # a raw response
