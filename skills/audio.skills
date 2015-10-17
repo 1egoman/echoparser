@@ -98,26 +98,6 @@ audio.playPlaylist
   ---
   playlist: String
 
-audio.playMusicName
-  play {name}
-  play a song {name}
-  play a song named {name}
-  play a song called {name}
-  play a song titled {name}
-  play song {name}
-  play song named {name}
-  play song called {name}
-  play song titled {name}
-  play music {name}
-  play music named {name}
-  play music called {name}
-  play music titled {name}
-  play tunes {name}
-  play tunes named {name}
-  play tunes called {name}
-  play tunes titled {name}
-  ---
-  name: String
 
 audio.playMusicNameArtist
   play {name} by {artist}
@@ -141,6 +121,28 @@ audio.playMusicNameArtist
   ---
   name: String
   artist: String
+
+
+audio.playMusicName
+  play {name}
+  play a song {name}
+  play a song named {name}
+  play a song called {name}
+  play a song titled {name}
+  play song {name}
+  play song named {name}
+  play song called {name}
+  play song titled {name}
+  play music {name}
+  play music named {name}
+  play music called {name}
+  play music titled {name}
+  play tunes {name}
+  play tunes named {name}
+  play tunes called {name}
+  play tunes titled {name}
+  ---
+  name: String
 
 audio.whatMusicPlaying
   what is playing

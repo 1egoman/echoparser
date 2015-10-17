@@ -32,7 +32,6 @@ exports.playMusicGeneral = (interaction, intent) ->
 exports.playMusicDescriptor = (interaction, intent) ->
   interaction.form_response true, "Not implemented.", true
 
-
 # search for the phrase specified and find a matching track
 exports.playMusicName = (interaction, intent) ->
   spotify.searchTracks(intent.data.name, limit: 1).then (data) ->
@@ -53,6 +52,29 @@ exports.playMusicName = (interaction, intent) ->
     else
       interaction.form_response true, "Couldn't find anything like that.", true
 
+
+# search for the phrase specified and find a matching track
+exports.playMusicNameArtist = (interaction, intent) ->
+  spotify.searchTracks "track:#{intent.data.name} artist:#{intent.data.artist}",
+    limit: 1
+  .then (data) ->
+    console.log data
+    if tracks = data.body.tracks.items
+
+      interaction.form_response true, \
+      "Play #{tracks[0].name} by #{tracks[0].artists[0].name}?"
+
+      interaction.await_response {}, (err, response) ->
+        if response.name is "responses.yes"
+          interaction.audio_response true, do (t=tracks[0]) ->
+            name: t.name
+            artist: t.artists.map((a) => a.name).join ', '
+            src: t.preview_url
+          , "Playing #{tracks[0].name}...", true
+        else
+          interaction.end_response()
+    else
+      interaction.form_response true, "Couldn't find anything like that.", true
 
 
 # search for the phrase specified and find a matching track
