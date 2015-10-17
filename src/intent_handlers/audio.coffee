@@ -3,7 +3,21 @@ Interaction = require "../interaction"
 Spotify = require "spotify-web-api-node"
 spotify = new Spotify
 
-# serch for the phrase specified and find a matching track
+base64 = require "base-64"
+require("request")
+  method: 'POST'
+  url: 'https://accounts.spotify.com/api/token'
+  headers:
+    'content-type': 'application/x-www-form-urlencoded'
+    'cache-control': 'no-cache'
+    authorization: "Basic #{base64.encode process.env.SPOTIFY_APP_CLIENTID+':'+process.env.SPOTIFY_APP_SECRET}"
+  form: grant_type: 'client_credentials'
+, (err, resp, body) ->
+  if not err and body
+    spotify.setAccessToken body.access_token
+    console.log "-> Authorized Spotify."
+  else
+    console.log err
 exports.playMusicName = (interaction, intent) ->
   spotify.searchTracks(intent.data.name, limit: 1).then (data) ->
     tracks = data.body.tracks.items
