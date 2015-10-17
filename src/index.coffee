@@ -1,5 +1,7 @@
 _ = require "underscore"
-app = require("express")()
+path = require "path"
+express = require("express")
+app = express()
 bodyParser = require "body-parser"
 app.use bodyParser.json()
 
@@ -15,7 +17,7 @@ Interaction = require "./interaction"
 SkillsList = require "./echo_lib/skill_list"
 skills_emitter = new SkillsList
 
-app.get "/", (req, res) -> res.send "Hello World!"
+app.use express.static path.join __dirname, '../public'
 
 # a list of all interactions happening
 interaction_container = []
@@ -24,8 +26,11 @@ interaction_container = []
 # look in intent_handles for the correctly named skill file
 # and then get the intent from inside
 get_intent_fn = (match_skill) ->
+  if match_skill
     skill_module = require "./intent_handlers/#{match_skill.name.split('.')[0]}"
     skill_module[match_skill.name.split('.')[1]]
+  else
+    null
 
 
 
@@ -59,7 +64,8 @@ app.post "/api/v1/intent", (req, res) ->
     if intent_module
       intent_module interaction, match_skill
     else
-      interaction.form_response false, "The intent #{match_skill.name} has no handler."
+      interaction.form_response false, \
+      "The intent #{match_skill and match_skill.name} has no handler.", true
 
 
 

@@ -1,0 +1,20 @@
+<html>
+  <head>
+    <title>echoparser gui</title>
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+  </head>
+  <body style="max-width: 500px; margin: 0px auto; padding: 20px;">
+
+    <input type="text" class="query-box" placeholder="Enter query here." />
+    <button onclick="query($('.query-box').val())">Go</button>
+    <button class="partway" onclick="query('yes', false)">yes</button>
+    <button class="partway" onclick="query('no', false)">no</button>
+    <button class="partway right" onclick="$('ul.intents')[0].innerHTML = ''">cls</button>
+
+    <br/>
+    <ul class="intents"></ul>
+
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

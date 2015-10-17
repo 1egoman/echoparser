@@ -50,7 +50,7 @@ module.exports = class Interaction extends EventEmitter
   # response.
   form_response: (status, text, end_session=false) ->
     @emit "intent_response",
-      outputSpeech:
+      outputSpeach:
         type: "PlainText"
         text: text
       shouldEndSession: end_session
@@ -58,7 +58,7 @@ module.exports = class Interaction extends EventEmitter
   # just end the interaction with no response back
   end_response: ->
     @emit "intent_response",
-      outputSpeech: null
+      outputSpeach: null
       shouldEndSession: true
 
   # a raw response
@@ -99,15 +99,14 @@ module.exports = class Interaction extends EventEmitter
   # This is played in the background and can be controlled with standard audio
   # actions.
   # ----------------------------------------------------------------------------
-  audio_response: (status, audio_url, text=null, end_session=false) ->
+  audio_response: (status, audio_data, text=null, end_session=false) ->
+    audio_data.type = "AudioLink"
     @raw_response
       outputSpeach: (if text
         type: "PlainText"
         text: text
       else undefined)
-      outputAudio:
-        type: "AudioLink"
-        src: audio_url
+      outputAudio: audio_data
       shouldEndSession: end_session
 
   # ----------------------------------------------------------------------------

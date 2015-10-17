@@ -43,7 +43,11 @@ exports.playMusicName = (interaction, intent) ->
 
       interaction.await_response {}, (err, response) ->
         if response.name is "responses.yes"
-          interaction.audio_response true, tracks[0], "Playing #{tracks[0].name}...", true
+          interaction.audio_response true, do (t=tracks[0]) ->
+            name: t.name
+            artist: t.artists.map((a) => a.name).join ', '
+            src: t.preview_url
+          , "Playing #{tracks[0].name}...", true
         else
           interaction.end_response()
     else

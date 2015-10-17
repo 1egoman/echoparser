@@ -1,0 +1,24 @@
+* {padding: 0px; margin: 0px;}
+h1,h2,h3,h4,h5,h6,p,a,span,button,input,li {
+  font-family: Helvetica, Arial, sans-serif;
+}
+input[type=text], button {
+  width: 100%;
+  margin-top: 5px;
+  padding: 3px;
+}
+ul li {
+  padding: 20px 0px;
+  list-style: none;
+}
+ul li.eoi {
+  background: goldenrod;
+  color: #fff;
+  text-align: center;
+  padding: 6px;
+}
+button.partway {
+  width: 20%;
+  display: inline;
+}
+button.partway.right { float: right; }
