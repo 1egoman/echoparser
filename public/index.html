@@ -9,6 +9,8 @@
       }
       input[type=text], button {
         width: 100%;
+        margin-top: 5px;
+        padding: 3px;
       }
       ul li {
         padding: 20px 0px;
@@ -20,13 +22,22 @@
         text-align: center;
         padding: 6px;
       }
+      button.partway {
+        width: 20%;
+        display: inline;
+      }
+      button.partway.right { float: right; }
     </style>
 
   </head>
   <body style="max-width: 500px; margin: 0px auto; padding: 20px;">
-    <h1>Echoparser Debug</h1>
-    <input type="text" class="query-box" />
+
+    <input type="text" class="query-box" placeholder="Enter query here." />
     <button onclick="query($('.query-box').val())">Go</button>
+    <button class="partway" onclick="query('yes', false)">yes</button>
+    <button class="partway" onclick="query('no', false)">no</button>
+    <button class="partway right" onclick="$('ul.intents')[0].innerHTML = ''">cls</button>
+
     <br/>
     <ul class="intents"></ul>
 
@@ -38,8 +49,8 @@
     })
 
     var interactionId = null;
-    var query = function(phrase) {
-      if (localStorage) localStorage.phrase = phrase
+    var query = function(phrase, store) {
+      if (localStorage && store !== false) localStorage.phrase = phrase
 
       // query the server
       $.ajax({
