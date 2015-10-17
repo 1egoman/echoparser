@@ -14,6 +14,7 @@ exports.getCurrentTime = (interaction, intent) ->
       else
         # otherwise, just return what we got originally...
         phrase
+    , true
 
 
 # get current time at a specified place
@@ -35,3 +36,4 @@ exports.getCurrentTimeAtLocation = (interaction, intent) ->
       else
         # otherwise, just return what we got originally...
         phrase
+    , true
