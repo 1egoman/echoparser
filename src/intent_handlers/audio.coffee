@@ -81,6 +81,14 @@ exports.playMusicArtist = (interaction, intent) ->
       interaction.form_response true, "Couldn't find anything like that.", true
 
 
+exports.addToPlaylist = (interaction, intent) ->
+  spotify.searchTracks(intent.data.name, limit: 1).then (data) =>
+    if data.body.tracks.items.length > 0
+      interaction.form_response true, "Add #{data.body.tracks.items[0].name} to playlist?"
+    else
+      interaction.form_response true, data
+
+
 exports.playPlaylist = (interaction, intent) ->
   spotify.searchPlaylists(intent.data.playlist).then (data) ->
     if playlist = data.body.playlists.items[0]

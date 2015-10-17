@@ -17,6 +17,7 @@ module.exports = (text, skill) ->
 
     if data
       name: int.intent
+      raw: text
 
       # a total workaround, but if something is in the utils skill then it's
       # global. (if it's said the context will switch to its skill from anywhere)
