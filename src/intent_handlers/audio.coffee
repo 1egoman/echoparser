@@ -3,6 +3,10 @@ Interaction = require "../interaction"
 Spotify = require "spotify-web-api-node"
 spotify = new Spotify
 
+async = require "async"
+
+tunein = require "tunein_scraper"
+
 base64 = require "base-64"
 request = require("request")
 request
@@ -49,7 +53,6 @@ exports.playMusicName = (interaction, intent) ->
 
 # search for the phrase specified and find a matching track
 exports.playMusicArtist = (interaction, intent) ->
-
   # get artist details
   spotify.searchArtists(intent.data.artist, limit: 1).then (data) ->
     if data and artist = data.body?.artists?.items[0]
@@ -95,6 +98,46 @@ exports.playPlaylist = (interaction, intent) ->
       interaction.form_response true, "Not Implemented. Later, we'll play #{playlist.name}.", true
     else
       interaction.form_response true, "No such playlist exists", true
+
+
+# search for a podcast and play it
+exports.playPodcastName = (interaction, intent) ->
+  tunein.searchForShow(intent.data.name).then (data) ->
+    if data.length > 0
+      podcast = data[0]
+
+      tunein.getEpisodesOfShow(podcast).then (episodes) ->
+        if episodes.length > 0
+          episode = episodes[0]
+
+          # get the stream for each episode
+          async.map episodes, (e, cb) ->
+            tunein.getStreamData(e).then (stream_data) ->
+              stream = stream_data.Streams.filter((a) -> a.Type is "Download")
+              if stream
+                e.src = stream[0].Url
+              cb null, e
+          , (err, tracks) =>
+            interaction.audio_playlist_response true, tracks, "Play '#{episode.name}' from '#{podcast.name}'?"
+
+            # wait for the user to confirm
+            interaction.await_response {}, (err, response) ->
+
+              # play it
+              if response.name is "responses.yes"
+                interaction.raw_response
+                  outputSpeach:
+                    type: "PlainText"
+                    text: "Ok"
+                  actions: [name: "play.media"]
+                  shouldEndSession: true
+              else
+                interaction.end_response()
+
+        else
+          interaction.form_response true, "No episodes of #{podcast.name} found."
+    else
+      interaction.form_response true, "No podcasts was found."
 
 # play something
 # exports.playMusicName new Interaction,

@@ -1,3 +1,19 @@
+
+audio.playPodcastName
+  play program {name}
+  play the program {name}
+  play program {name}
+  play the program {name}
+  play a program {name}
+  play a program named {name}
+  play a program called {name}
+  play a program titled {name}
+  play a program named {name}
+  play a program called {name}
+  play a program titled {name}
+  ---
+  name: String
+
 audio.playMusicGeneral
   play some music
   play music
@@ -144,17 +160,3 @@ audio.whatMusicPlaying
   what's playing now
   ---
 
-audio.playPodcastName
-  play program {name}
-  play the program {name}
-  play program {name}
-  play the program {name}
-  play a program {name}
-  play a program named {name}
-  play a program called {name}
-  play a program titled {name}
-  play a program named {name}
-  play a program called {name}
-  play a program titled {name}
-  ---
-  name: String
