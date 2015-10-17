@@ -1,0 +1,29 @@
+responses.yes
+  yes
+  sure
+  true
+  acknowlege
+  yep
+  ---
+
+responses.no
+  no
+  nope
+  not
+  never
+  ---
+
+responses.slice
+  only the {nth}
+  only {nth}
+  only {nth} one
+  only the {nth} one
+  ---
+  nth: Number
+
+responses.choose
+  only play {item}
+  only {item}
+  only use {item}
+  ---
+  item: String

@@ -37,9 +37,9 @@ module.exports = class Interaction extends EventEmitter
 
     @DEBUG = true
 
-  # ------------------------------------------------------------------------------
+  # ----------------------------------------------------------------------------
   # Methods to respond to an intent with
-  # ------------------------------------------------------------------------------
+  # ----------------------------------------------------------------------------
 
   # tell us that we'd like to respond to what the user said
   # this is a helper to make the responses look good and easy for uesers to
@@ -74,7 +74,9 @@ module.exports = class Interaction extends EventEmitter
     intent.interactionId = @id
     intent
 
+  # ----------------------------------------------------------------------------
   # pass the query on to wolfram alpha
+  # ----------------------------------------------------------------------------
   search_wolfram: (phrase, callback) ->
     # wolfram parsing function
     parse_wolfram_results = (results) ->
@@ -90,6 +92,46 @@ module.exports = class Interaction extends EventEmitter
         @form_response true, parse_wolfram_results result
       else
         @form_response true, "Wolfram Alpha errored: #{err}"
+
+
+  # ----------------------------------------------------------------------------
+  # Stream an audio link to a device
+  # This is played in the background and can be controlled with standard audio
+  # actions.
+  # ----------------------------------------------------------------------------
+  audio_response: (status, audio_url, text=null, end_session=false) ->
+    @raw_response
+      outputSpeach: (if text
+        type: "PlainText"
+        text: text
+      else undefined)
+      outputAudio:
+        type: "AudioLink"
+        src: audio_url
+      shouldEndSession: end_session
+
+  # ----------------------------------------------------------------------------
+  # Stream a list of media to a device
+  # This is played in the background and can be controlled with standard audio
+  # actions. A playlist is an array of objects where each object has the key
+  # "name", "artist", and "src" at minimum.
+  # ----------------------------------------------------------------------------
+  audio_playlist_response: (status, audio_playlist, text=null, end_session=false) ->
+    @raw_response
+      outputSpeach: (if text
+        type: "PlainText"
+        text: text
+      else undefined)
+      outputAudio:
+        type: "AudioLinkPlaylist"
+        playlist: do (audio_playlist) =>
+          results = []
+          audio_playlist.forEach (p) =>
+            if p.name and p.src
+              results.push p
+          results
+      shouldEndSession: end_session
+
 
   # debug logging
   emit: ->
