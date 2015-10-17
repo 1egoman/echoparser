@@ -37,9 +37,9 @@ module.exports = class Interaction extends EventEmitter
 
     @DEBUG = true
 
-  # ------------------------------------------------------------------------------
+  # ----------------------------------------------------------------------------
   # Methods to respond to an intent with
-  # ------------------------------------------------------------------------------
+  # ----------------------------------------------------------------------------
 
   # tell us that we'd like to respond to what the user said
   # this is a helper to make the responses look good and easy for uesers to
@@ -74,9 +74,9 @@ module.exports = class Interaction extends EventEmitter
     intent.interactionId = @id
     intent
 
-  # ------------------------------------------------------------------------------
+  # ----------------------------------------------------------------------------
   # pass the query on to wolfram alpha
-  # ------------------------------------------------------------------------------
+  # ----------------------------------------------------------------------------
   search_wolfram: (phrase, callback) ->
     # wolfram parsing function
     parse_wolfram_results = (results) ->
@@ -94,12 +94,12 @@ module.exports = class Interaction extends EventEmitter
         @form_response true, "Wolfram Alpha errored: #{err}"
 
 
-  # ------------------------------------------------------------------------------
+  # ----------------------------------------------------------------------------
   # Stream an audio link to a device
   # This is played in the background and can be controlled with standard audio
   # actions.
-  # ------------------------------------------------------------------------------
-  audio_response: (status, audio_url, text=null) ->
+  # ----------------------------------------------------------------------------
+  audio_response: (status, audio_url, text=null, end_session=false) ->
     @raw_response
       outputSpeach: (if text
         type: "PlainText"
@@ -108,7 +108,7 @@ module.exports = class Interaction extends EventEmitter
       outputAudio:
         type: "AudioLink"
         src: audio_url
-      shouldEndSession: false
+      shouldEndSession: end_session
 
   # debug logging
   emit: ->
