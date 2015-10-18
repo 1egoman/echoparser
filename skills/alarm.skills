@@ -22,4 +22,7 @@ alarm.snooze
   snooze
   snooze alarm
   snooze timer
+  snooze for {duration}
+  snooze {duration}
   ---
+  duration: When

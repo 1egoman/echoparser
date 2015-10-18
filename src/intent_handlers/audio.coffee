@@ -26,18 +26,18 @@ request
 
 # get play a random track
 exports.playMusicGeneral = (interaction, intent) ->
-  interaction.form_response true, "Not implemented.", true
+  interaction.form_response false, "Not implemented.", true
 
 # get a track to play from an adjective
 exports.playMusicDescriptor = (interaction, intent) ->
-  interaction.form_response true, "Not implemented.", true
+  interaction.form_response false, "Not implemented.", true
 
 # search for the phrase specified and find a matching track
 exports.playMusicName = (interaction, intent) ->
   spotify.searchTracks(intent.data.name, limit: 1).then (data) ->
     if tracks = data.body.tracks.items
 
-      interaction.form_response true, \
+      interaction.form_response false, \
       "Play #{tracks[0].name} by #{tracks[0].artists[0].name}?"
 
       interaction.await_response {}, (err, response) ->
@@ -50,7 +50,7 @@ exports.playMusicName = (interaction, intent) ->
         else
           interaction.end_response()
     else
-      interaction.form_response true, "Couldn't find anything like that.", true
+      interaction.form_response false, "Couldn't find anything like that.", true
 
 
 # search for the phrase specified and find a matching track
@@ -61,7 +61,7 @@ exports.playMusicNameArtist = (interaction, intent) ->
     console.log data
     if tracks = data.body.tracks.items
 
-      interaction.form_response true, \
+      interaction.form_response false, \
       "Play #{tracks[0].name} by #{tracks[0].artists[0].name}?"
 
       interaction.await_response {}, (err, response) ->
@@ -74,7 +74,7 @@ exports.playMusicNameArtist = (interaction, intent) ->
         else
           interaction.end_response()
     else
-      interaction.form_response true, "Couldn't find anything like that.", true
+      interaction.form_response false, "Couldn't find anything like that.", true
 
 
 # search for the phrase specified and find a matching track
@@ -109,23 +109,23 @@ exports.playMusicArtist = (interaction, intent) ->
             interaction.end_response()
 
     else
-      interaction.form_response true, "Couldn't find anything like that.", true
+      interaction.form_response false, "Couldn't find anything like that.", true
 
 
 exports.addToPlaylist = (interaction, intent) ->
   spotify.searchTracks(intent.data.name, limit: 1).then (data) =>
     if data.body.tracks.items.length > 0
-      interaction.form_response true, "Not Implemented. Later, we'll add #{data.body.tracks.items[0].name} to playlist."
+      interaction.form_response false, "Not Implemented. Later, we'll add #{data.body.tracks.items[0].name} to playlist."
     else
-      interaction.form_response true, data
+      interaction.form_response false, data
 
 
 exports.playPlaylist = (interaction, intent) ->
   spotify.searchPlaylists(intent.data.playlist).then (data) ->
     if playlist = data.body.playlists.items[0]
-      interaction.form_response true, "Not Implemented. Later, we'll play #{playlist.name}.", true
+      interaction.form_response false, "Not Implemented. Later, we'll play #{playlist.name}.", true
     else
-      interaction.form_response true, "No such playlist exists", true
+      interaction.form_response false, "No such playlist exists", true
 
 
 # search for a podcast and play it
@@ -165,9 +165,9 @@ exports.playPodcastName = (interaction, intent) ->
                 interaction.end_response()
 
         else
-          interaction.form_response true, "No episodes of #{podcast.name} found."
+          interaction.form_response false, "No episodes of #{podcast.name} found."
     else
-      interaction.form_response true, "No podcasts was found."
+      interaction.form_response false, "No podcasts was found."
 
 
 # what audio is playing?
@@ -175,7 +175,7 @@ exports.whatMusicPlaying = (interaction, intent) ->
   if interaction.remote.playlist.length and track = interaction.remote.playlist[0]
 
     # let the user know what thing is playing currently
-    interaction.form_response true, switch
+    interaction.form_response false, switch
       when track.name and track.artist
         "#{track.name} by #{track.artist} is playing."
       when track.name
@@ -185,4 +185,4 @@ exports.whatMusicPlaying = (interaction, intent) ->
     , true
 
   else
-    interaction.form_response true, "Nothing is playing right now."
+    interaction.form_response false, "Nothing is playing right now."
