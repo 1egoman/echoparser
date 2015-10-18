@@ -23,6 +23,11 @@ module.exports = class Interaction extends EventEmitter
     @id = uuid.v4()
     @intents = []
 
+    # TODO pull this in from a device
+    @remote =
+      playlist: []
+      state: {}
+
     @on "intent_response", (intent) ->
       @intents.push
         direction: "outgoing"
@@ -62,7 +67,26 @@ module.exports = class Interaction extends EventEmitter
       shouldEndSession: true
 
   # a raw response
-  raw_response: (data) -> @emit "intent_response", data
+  raw_response: (data) ->
+
+    # audio changes we should be logging?
+    # we want to know what the playlist of tracks looks like device-side
+    if data.outputAudio
+      if data.outputAudio.type.indexOf("playlist") isnt -1
+        @remote.playlist = data.outputAudio
+      else
+        @remote.playlist = [data.outputAudio]
+
+    # also, log any new actions that have changed states
+    if data.actions
+      for k,v of data.actions
+        if v.state
+          @remote.state[k] = v
+        else
+          delete @remote.state[k]
+
+    # finally, emit the event
+    @emit "intent_response", data
 
   # wait for a new intent and feed it to whoever asks
   await_response: (opts={}, callback) ->

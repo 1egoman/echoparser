@@ -101,7 +101,9 @@ exports.playMusicArtist = (interaction, intent) ->
               outputSpeach:
                 type: "PlainText"
                 text: "Ok"
-              actions: [name: "play.media"]
+              actions:
+                "play.media":
+                  state: true
               shouldEndSession: true
           else
             interaction.end_response()
@@ -155,7 +157,9 @@ exports.playPodcastName = (interaction, intent) ->
                   outputSpeach:
                     type: "PlainText"
                     text: "Ok"
-                  actions: [name: "play.media"]
+                  actions:
+                    "play.media":
+                      state: true
                   shouldEndSession: true
               else
                 interaction.end_response()
@@ -165,8 +169,20 @@ exports.playPodcastName = (interaction, intent) ->
     else
       interaction.form_response true, "No podcasts was found."
 
-# play something
-# exports.playMusicName new Interaction,
-#   name: 'audio.playMusicName'
-#   data:
-#     name: "stuff you should know"
+
+# what audio is playing?
+exports.whatMusicPlaying = (interaction, intent) ->
+  if interaction.remote.playlist.length and track = interaction.remote.playlist[0]
+
+    # let the user know what thing is playing currently
+    interaction.form_response true, switch
+      when track.name and track.artist
+        "#{track.name} by #{track.artist} is playing."
+      when track.name
+        "#{track.name} is playing."
+      else
+        "Something is playing right now, but I don't have any information about it."
+    , true
+
+  else
+    interaction.form_response true, "Nothing is playing right now."
