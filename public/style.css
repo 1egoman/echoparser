@@ -7,6 +7,14 @@ input[type=text], button {
   margin-top: 5px;
   padding: 3px;
 }
+
+img.spinner {
+  width: 200px;
+  height: 150px;
+  margin: 10px auto;
+  display: none;
+}
+
 ul li {
   padding: 20px 0px;
   list-style: none;
@@ -17,6 +25,7 @@ ul li.eoi {
   text-align: center;
   padding: 6px;
 }
+
 button.partway {
   width: 16%;
   display: inline;

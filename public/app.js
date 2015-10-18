@@ -4,6 +4,10 @@ $(document).ready(function() {
 
 var interactionId = null;
 var query = function(phrase, store) {
+  // show spinner
+  $(".spinner").css("display", "block")
+
+  // save phrase for next time
   if (localStorage && store !== false) localStorage.phrase = phrase
 
   // query the server
@@ -31,6 +35,9 @@ var query = function(phrase, store) {
         $("ul.intents").append("<li class='eoi'>End of Interaction</li>");
         interactionId = null
       }
+
+      // hide spinner
+      $(".spinner").css("display", "none")
     }
   })
 }
