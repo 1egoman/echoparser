@@ -22,6 +22,12 @@ describe('Interaction', function() {
       _this.interaction = new Interaction()
     })
 
+    // remove all listeners between each test
+    beforeEach(function() {
+      _this.interaction.removeAllListeners("intent_response")
+    })
+
+
     it('has no intents', function() {
       assert.equal(_this.interaction.intents.length, 0)
     });
@@ -49,6 +55,12 @@ describe('Interaction', function() {
     before(function() {
       _this.interaction = new Interaction({debug: false})
     })
+
+    // remove all listeners between each test
+    beforeEach(function() {
+      _this.interaction.removeAllListeners("intent_response")
+    })
+
 
     it('correctly sends out a response with correct data', function(done) {
       _this.interaction.once("intent_response", function(data) {
@@ -87,6 +99,12 @@ describe('Interaction', function() {
       _this.interaction = new Interaction({debug: false})
     })
 
+    // remove all listeners between each test
+    beforeEach(function() {
+      _this.interaction.removeAllListeners("intent_response")
+    })
+
+
     it('ends response', function(done) {
       _this.interaction.once("intent_response", function(data) {
         assert.equal(data.outputSpeach, null)
@@ -111,6 +129,11 @@ describe('Interaction', function() {
     // create a new interaction
     before(function() {
       _this.interaction = new Interaction({debug: false})
+    })
+
+    // remove all listeners between each test
+    beforeEach(function() {
+      _this.interaction.removeAllListeners("intent_response")
     })
 
     it('accepts an object correctly formatted', function(done) {
@@ -140,6 +163,53 @@ describe('Interaction', function() {
         assert.equal(_this.interaction.raw_response(bogus), false)
       })
     });
+
+    it('correctly puts audio into remote playlist', function(done) {
+      _this.interaction.once("intent_response", function(data) {
+        assert.equal(data.outputSpeach.text, "response text")
+        assert.equal(data.outputSpeach.type, "PlainText")
+        assert.equal(data.shouldEndSession, false)
+
+        // audio was put into the playlist
+        assert.deepEqual(_this.interaction.remote.playlist, [data.outputAudio])
+        done()
+      })
+      _this.interaction.raw_response({
+        outputSpeach: {
+          type: "PlainText",
+          text: "response text"
+        },
+        outputAudio: {
+          type: "AudioLink",
+          src: "http://dummy.url/track.mp3"
+        },
+        shouldEndSession: false
+      })
+    });
+
+    it('correctly puts actions into remote', function(done) {
+      _this.interaction.once("intent_response", function(data) {
+        assert.equal(data.outputSpeach.text, "response text")
+        assert.equal(data.outputSpeach.type, "PlainText")
+        assert.equal(data.shouldEndSession, false)
+
+        // actions were put into remote
+        assert.deepEqual(_this.interaction.remote.state, {"real.action":{state: true}})
+        done()
+      })
+      _this.interaction.raw_response({
+        outputSpeach: {
+          type: "PlainText",
+          text: "response text"
+        },
+        actions: {
+          "real.action": { state: true },
+          "empty.action": null // null = not added
+        },
+        shouldEndSession: false
+      })
+    });
+
 
 
   });

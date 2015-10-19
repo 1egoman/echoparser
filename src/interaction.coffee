@@ -69,7 +69,7 @@ module.exports = class Interaction extends EventEmitter
   # a raw response
   raw_response: (data) ->
     # were we passed something that wasn't an object?
-    if not data or typeof data isnt "object"
+    if not _.isObject data
       false
     else
 
@@ -84,10 +84,11 @@ module.exports = class Interaction extends EventEmitter
       # also, log any new actions that have changed states
       if data.actions
         for k,v of data.actions
-          if v.state
+          if _.isObject v
             @remote.state[k] = v
-          else
+          else if _.isObject v
             delete @remote.state[k]
+          else false
 
       # finally, emit the event
       @emit "intent_response", data
