@@ -8,6 +8,11 @@ loadFile = function(file) {
 
 Interaction = loadFile("interaction")
 
+
+// ------------------------------------------------------------------------------
+// Interaction
+// The core concept used to describe an interchange of intents
+// ------------------------------------------------------------------------------
 describe('Interaction', function() {
   describe('constructor', function() {
     _this = this
