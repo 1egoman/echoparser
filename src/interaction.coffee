@@ -101,10 +101,11 @@ module.exports = class Interaction extends EventEmitter
   # ----------------------------------------------------------------------------
   # pass the query on to wolfram alpha
   # ----------------------------------------------------------------------------
-  search_wolfram: (phrase, callback) ->
+  search_wolfram: (phrase, callback, end_session=false) ->
     # wolfram parsing function
     parse_wolfram_results = (results) ->
-      pod = _.find results, (i) -> i.title is "Result"
+      console.log results
+      pod = _.find results, (i) -> i.primary is true
       if pod
         pod.subpods[0].value
 
@@ -113,9 +114,9 @@ module.exports = class Interaction extends EventEmitter
         # just send the data back to the user
         callback err, parse_wolfram_results(result), result
       else if not err
-        @form_response true, parse_wolfram_results result
+        @form_response true, parse_wolfram_results(result), end_session
       else
-        @form_response true, "Wolfram Alpha errored: #{err}"
+        @form_response true, "Wolfram Alpha errored: #{err}", end_session
 
 
   # ----------------------------------------------------------------------------
