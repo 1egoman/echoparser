@@ -19,7 +19,7 @@ wolfram = require("wolfram").createClient process.env.WOLFRAM_APP_KEY
 # ------------------------------------------------------------------------------
 module.exports = class Interaction extends EventEmitter
 
-  constructor: ->
+  constructor: (opts={debug: true})->
     @id = uuid.v4()
     @intents = []
 
@@ -40,7 +40,7 @@ module.exports = class Interaction extends EventEmitter
         datestamp: new Date()
         intent: intent
 
-    @DEBUG = true
+    @DEBUG = opts.debug
 
   # ----------------------------------------------------------------------------
   # Methods to respond to an intent with

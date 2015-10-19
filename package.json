@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "coffee -c -o dist/ src/ && mocha",
+    "test": "coffee -c -o dist/ src/ && NODE_ENV=test mocha",
     "start": "coffee src/index.coffee"
   },
   "author": "",
