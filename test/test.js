@@ -76,10 +76,10 @@ describe('Interaction', function() {
 
 
 // ------------------------------------------------------------------------------
-// form_response
-// A intent sends data to be sent back to the device (and the user)
+// end_response
+// Stop the response and send nothing.
 // ------------------------------------------------------------------------------
-  describe('form_response', function() {
+  describe('end_response', function() {
     _this = this
 
     // create a new interaction
@@ -87,28 +87,62 @@ describe('Interaction', function() {
       _this.interaction = new Interaction({debug: false})
     })
 
-    it('correctly sends out a response with correct data', function(done) {
+    it('ends response', function(done) {
+      _this.interaction.once("intent_response", function(data) {
+        assert.equal(data.outputSpeach, null)
+        assert.equal(data.shouldEndSession, true)
+        done()
+      })
+      _this.interaction.end_response()
+    });
+
+  });
+
+
+
+
+// ------------------------------------------------------------------------------
+// raw_response
+// Send back exactly what we say, used underneath all the other *_response stuff
+// ------------------------------------------------------------------------------
+  describe('raw_response', function() {
+    _this = this
+
+    // create a new interaction
+    before(function() {
+      _this.interaction = new Interaction({debug: false})
+    })
+
+    it('accepts an object correctly formatted', function(done) {
       _this.interaction.once("intent_response", function(data) {
         assert.equal(data.outputSpeach.text, "response text")
         assert.equal(data.outputSpeach.type, "PlainText")
         assert.equal(data.shouldEndSession, false)
         done()
       })
-      _this.interaction.form_response(false, "response text", false)
+      _this.interaction.raw_response({
+        outputSpeach: {
+          type: "PlainText",
+          text: "response text"
+        },
+        shouldEndSession: false
+      })
     });
 
-    it('respects shouldEndSession', function(done) {
+    it('will return false if passed something not an object', function() {
       _this.interaction.once("intent_response", function(data) {
-        assert.equal(data.outputSpeach.text, "response text")
-        assert.equal(data.outputSpeach.type, "PlainText")
-        assert.equal(data.shouldEndSession, true)
-        done()
+        throw new Error("Send a response when it was sent bogus data.")
       })
-      _this.interaction.form_response(false, "response text", true)
+
+      // test a bunch of things to make sure they all return false
+      choices = [1, null, "string", undefined, 0]
+      choices.forEach(function(bogus) {
+        assert.equal(_this.interaction.raw_response(bogus), false)
+      })
     });
+
 
   });
-
 
 
 });
