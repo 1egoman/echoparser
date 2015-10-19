@@ -210,9 +210,77 @@ describe('Interaction', function() {
       })
     });
 
-
-
   });
+
+
+// ------------------------------------------------------------------------------
+// await_response
+// wait for a new intent to come in on the interaction
+// ------------------------------------------------------------------------------
+  describe("await_response", function() {
+
+
+    // create a new interaction
+    before(function() {
+      _this.interaction = new Interaction({debug: false})
+    })
+
+    // remove all listeners between each test
+    beforeEach(function() {
+      _this.interaction.removeAllListeners("intent_response")
+    })
+
+    it('listens for a response and calls back that response', function(done) {
+      // our incoming response
+      intent = {
+        outputSpeach: {
+          type: "PlainText",
+          text: "Hello, World!"
+        },
+        shouldEndSession: false
+      }
+
+      _this.interaction.await_response({}, function(err, risen_intent) {
+        assert.equal(err, null)
+        assert.deepEqual(risen_intent, intent)
+        done()
+      })
+      // pretend to be an incoming response from a user
+      _this.interaction.emit("intent", intent)
+    })
+  })
+
+
+// ------------------------------------------------------------------------------
+// format_intent
+// add the interaction id to an intent before being sent out
+// ------------------------------------------------------------------------------
+  describe("format_intent", function() {
+
+
+    // create a new interaction
+    before(function() {
+      _this.interaction = new Interaction({debug: false})
+    })
+
+    // remove all listeners between each test
+    beforeEach(function() {
+      _this.interaction.removeAllListeners("intent_response")
+    })
+
+    it('adds interaction id to an intent', function() {
+      formatted = _this.interaction.format_intent({
+        outputSpeach: {
+          type: "PlainText",
+          text: "Hello, World!"
+        },
+        shouldEndSession: false
+      })
+
+      assert.equal(formatted.interactionId, _this.interaction.id)
+    })
+  })
+
 
 
 });
