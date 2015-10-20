@@ -109,7 +109,6 @@ module.exports = class Interaction extends EventEmitter
   search_wolfram: (phrase, callback, end_session=false) ->
     # wolfram parsing function
     parse_wolfram_results = (results) ->
-      console.log results
       pod = _.find results, (i) -> i.primary is true
       if pod
         pod.subpods[0].value

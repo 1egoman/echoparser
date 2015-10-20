@@ -282,6 +282,74 @@ describe('Interaction', function() {
   })
 
 
+// ------------------------------------------------------------------------------
+// search_wolfram
+// search wolfram alpha for a query
+// ------------------------------------------------------------------------------
+  describe("search_wolfram", function() {
+
+
+    // create a new interaction
+    before(function() {
+      _this.interaction = new Interaction({debug: false})
+    })
+
+    // remove all listeners between each test
+    beforeEach(function() {
+      _this.interaction.removeAllListeners("intent_response")
+    })
+
+    it('makes sure there\'s a WOLFRAM_APP_KEY env variable', function() {
+      assert(process.env.WOLFRAM_APP_KEY) // truthy
+    })
+
+    it('querys wolfram for the time, looks for hours, minutes, and seconds, using a callback', function(done) {
+      this.timeout(10000) // could take a while
+      this.slow(3000) // more of the same /\
+      _this.interaction.search_wolfram("time", function(err, data) {
+
+        // look for hours
+        hours = new Date().getHours() % 12
+        assert.notEqual(data.indexOf(hours), -1)
+
+        // look for minutes
+        min = new Date().getMinutes()
+        assert.notEqual(data.indexOf(min), -1)
+
+        // look for am/pm
+        merid = new Date().getHours() > 12 ? "pm" : "am"
+        assert.notEqual(data.indexOf(merid), -1)
+
+
+        done()
+      })
+    })
+
+    it('querys wolfram for the time, looks for hours, minutes, and seconds, and sends as a response', function(done) {
+      this.timeout(10000) // could take a while
+      this.slow(3000) // more of the same /\
+      _this.interaction.on("intent_response", function(data) {
+        // look for hours
+        hours = new Date().getHours() % 12
+        assert.notEqual(data.outputSpeach.text.indexOf(hours), -1)
+
+        // look for minutes
+        min = new Date().getMinutes()
+        assert.notEqual(data.outputSpeach.text.indexOf(min), -1)
+
+        // look for am/pm
+        merid = new Date().getHours() > 12 ? "pm" : "am"
+        assert.notEqual(data.outputSpeach.text.indexOf(merid), -1)
+
+        done()
+      })
+      _this.interaction.search_wolfram("time", undefined, false)
+    })
+
+  })
+
+
+
 
 });
 
