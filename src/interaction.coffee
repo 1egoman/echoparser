@@ -129,14 +129,17 @@ module.exports = class Interaction extends EventEmitter
   # actions.
   # ----------------------------------------------------------------------------
   audio_response: (status, audio_data, text=null, end_session=false) ->
-    audio_data.type = "AudioLink"
-    @raw_response
-      outputSpeach: (if text
-        type: "PlainText"
-        text: text
-      else undefined)
-      outputAudio: audio_data
-      shouldEndSession: end_session
+    if _.isObject audio_data
+      audio_data.type = "AudioLink"
+      @raw_response
+        outputSpeach: (if text
+          type: "PlainText"
+          text: text
+        else undefined)
+        outputAudio: audio_data
+        shouldEndSession: end_session
+    else
+      false
 
   # ----------------------------------------------------------------------------
   # Stream a list of media to a device
