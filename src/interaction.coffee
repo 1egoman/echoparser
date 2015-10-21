@@ -76,8 +76,8 @@ module.exports = class Interaction extends EventEmitter
       # audio changes we should be logging?
       # we want to know what the playlist of tracks looks like device-side
       if data.outputAudio
-        if data.outputAudio.type.indexOf("playlist") isnt -1
-          @remote.playlist = data.outputAudio
+        if data.outputAudio.type.indexOf("Playlist") isnt -1
+          @remote.playlist = data.outputAudio.playlist
         else
           @remote.playlist = [data.outputAudio]
 
@@ -148,21 +148,23 @@ module.exports = class Interaction extends EventEmitter
   # "name", "artist", and "src" at minimum.
   # ----------------------------------------------------------------------------
   audio_playlist_response: (status, audio_playlist, text=null, end_session=false) ->
-    @raw_response
-      outputSpeach: (if text
-        type: "PlainText"
-        text: text
-      else undefined)
-      outputAudio:
-        type: "AudioLinkPlaylist"
-        playlist: do (audio_playlist) =>
-          results = []
-          audio_playlist.forEach (p) =>
-            if p.name and p.src
-              results.push p
-          results
-      shouldEndSession: end_session
-
+    if _.isArray audio_playlist
+      @raw_response
+        outputSpeach: (if text
+          type: "PlainText"
+          text: text
+        else undefined)
+        outputAudio:
+          type: "AudioLinkPlaylist"
+          playlist: do (audio_playlist) =>
+            results = []
+            audio_playlist.forEach (p) =>
+              if p.name and p.src
+                results.push p
+            results
+        shouldEndSession: end_session
+    else
+      false
 
   # debug logging
   emit: ->

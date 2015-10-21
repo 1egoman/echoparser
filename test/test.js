@@ -430,10 +430,96 @@ describe('Interaction', function() {
       }, undefined, true)
     });
 
+  });
+
+
+
+// ------------------------------------------------------------------------------
+// audio_playlist_response
+// Send an audio playlist payload in the response
+// ------------------------------------------------------------------------------
+  describe('audio_playlist_response', function() {
+    _this = this
+
+    // create a new interaction
+    before(function() {
+      _this.interaction = new Interaction({debug: false})
+    })
+
+    // remove all listeners between each test
+    beforeEach(function() {
+      _this.interaction.removeAllListeners("intent_response")
+    })
+
+    it('will return false if passed something not an object', function() {
+      _this.interaction.once("intent_response", function(data) {
+        throw new Error("Send a response when it was sent bogus data.")
+      })
+
+      // test a bunch of things to make sure they all return false
+      choices = [1, null, "string", undefined, 0]
+      choices.forEach(function(bogus) {
+        assert.equal(_this.interaction.audio_playlist_response(false, bogus), false)
+      })
+    });
+
+    it('puts the audio playlist in the response', function(done) {
+      _this.interaction.once("intent_response", function(data) {
+        assert.equal(data.outputAudio.type, "AudioLinkPlaylist")
+        assert.equal(data.outputAudio.playlist[0].src, "http://dummy.url/track.mp3")
+        assert.equal(data.outputAudio.playlist[0].name, "Song Title")
+        assert.equal(data.shouldEndSession, false)
+
+        // audio was put into the playlist, too
+        assert.deepEqual(_this.interaction.remote.playlist, data.outputAudio.playlist)
+        done()
+      })
+      _this.interaction.audio_playlist_response(false, [{
+        name: "Song Title",
+        src: "http://dummy.url/track.mp3"
+      }])
+    });
+
+    it('audio_response with outputSpeach', function(done) {
+      _this.interaction.once("intent_response", function(data) {
+        assert.equal(data.outputAudio.type, "AudioLinkPlaylist")
+        assert.equal(data.outputAudio.playlist[0].src, "http://dummy.url/track.mp3")
+        assert.equal(data.outputAudio.playlist[0].name, "Song Title")
+        assert.equal(data.outputSpeach.text, "Hello World!")
+        assert.equal(data.shouldEndSession, false)
+
+        // audio was put into the playlist, too
+        assert.deepEqual(_this.interaction.remote.playlist, data.outputAudio.playlist)
+        done()
+      })
+      _this.interaction.audio_playlist_response(false, [{
+        name: "Song Title",
+        src: "http://dummy.url/track.mp3"
+      }], "Hello World!")
+    });
+
+    it('audio_playlist_response that ends session', function(done) {
+      _this.interaction.once("intent_response", function(data) {
+        assert.equal(data.outputAudio.type, "AudioLinkPlaylist")
+        assert.equal(data.outputAudio.playlist[0].src, "http://dummy.url/track.mp3")
+        assert.equal(data.outputAudio.playlist[0].name, "Song Title")
+        assert.equal(data.outputSpeach.text, "Hello World!")
+        assert.equal(data.shouldEndSession, true)
+
+        // audio was put into the playlist, too
+        assert.deepEqual(_this.interaction.remote.playlist, data.outputAudio.playlist)
+        done()
+      })
+      _this.interaction.audio_playlist_response(false, [{
+        name: "Song Title",
+        src: "http://dummy.url/track.mp3"
+      }], "Hello World!", true)
+    });
+
+
 
 
   });
-
 
 
 });
