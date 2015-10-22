@@ -1,10 +1,5 @@
 var assert = require('assert');
-
-// load a file to test
-loadFile = function(file) {
-  console.log("... Loading "+file)
-  return require("../dist/"+file);
-}
+var loadFile = require("./helpers").loadFile
 
 Interaction = loadFile("interaction")
 
