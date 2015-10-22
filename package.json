@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "coffee -c -o dist/ src/ && NODE_ENV=test mocha",
-    "start": "coffee src/index.coffee"
+    "start": "coffee src/index.coffee",
+    "coverage": "coffee -c -o dist/ src/ && istanbul cover _mocha -- -R spec"
   },
   "author": "",
   "license": "MIT",

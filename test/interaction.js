@@ -77,6 +77,17 @@ describe('Interaction', function() {
       _this.interaction.form_response(false, "response text", true)
     });
 
+    it('respects shouldEndSession: if null, become false', function(done) {
+      _this.interaction.once("intent_response", function(data) {
+        assert.equal(data.outputSpeach.text, "response text")
+        assert.equal(data.outputSpeach.type, "PlainText")
+        assert.equal(data.shouldEndSession, false)
+        done()
+      })
+      _this.interaction.form_response(false, "response text", null)
+    });
+
+
   });
 
 
@@ -243,6 +254,26 @@ describe('Interaction', function() {
       // pretend to be an incoming response from a user
       _this.interaction.emit("intent", intent)
     })
+
+    it('will still work with an empty opts for await_reponse', function(done) {
+      // our incoming response
+      intent = {
+        outputSpeach: {
+          type: "PlainText",
+          text: "Hello, World!"
+        },
+        shouldEndSession: false
+      }
+
+      _this.interaction.await_response(null, function(err, risen_intent) {
+        assert.equal(err, null)
+        assert.deepEqual(risen_intent, intent)
+        done()
+      })
+      // pretend to be an incoming response from a user
+      _this.interaction.emit("intent", intent)
+    })
+
   })
 
 
