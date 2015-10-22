@@ -174,4 +174,48 @@ describe("Skill List", function() {
     })
   })
 
+  describe("unpack_intent_types", function() {
+    types = ["Number", "String", "RegExp", "Date"] // TODO More types?
+    types.forEach(function(type) {
+      it("can unpack type in templ: "+type, function() {
+
+        skill = _this.skill_list.decode_skills([
+          "testSkill.testIntent",
+          "  foo {bar}",
+          "  ---",
+          "  bar: "+type,
+        ].join('\n'))[0]
+
+        assert.equal(skill.name, "testSkill")
+        assert.deepEqual(skill.intents, [{
+          intent: "testIntent",
+          utterances: [
+            "foo {bar}",
+          ],
+          templ: {
+            bar: {
+              type: type
+            }
+          }
+        }])
+
+        // now, unpack
+        skill = _this.skill_list.unpack_intent_types([skill])[0]
+        assert.equal(skill.name, "testSkill")
+        assert.deepEqual(skill.intents, [{
+          intent: "testIntent",
+          utterances: [
+            "foo {bar}",
+          ],
+          templ: {
+            bar: {
+              type: eval(type)
+            }
+          }
+        }])
+      })
+    })
+  })
+
+
 })
