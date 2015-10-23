@@ -1,0 +1,8 @@
+
+dependencies:
+  pre:
+    - npm install -g mocha coffeescript
+
+test:
+  override:
+    - npm test
