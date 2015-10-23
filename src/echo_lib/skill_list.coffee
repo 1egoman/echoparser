@@ -8,6 +8,8 @@ class SkillList extends EventEmitter
   constructor: (@skills_location="./skills", auto_pull=true) -> auto_pull and @pull()
 
   # read skills from file and let others know about it
+  # FIXME how to test this?
+  `/* istanbul ignore next */`
   pull: =>
     @_skills = []
     fs.readdir @skills_location, (err, skill_files) =>
