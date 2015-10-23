@@ -1,7 +1,7 @@
 
 dependencies:
   pre:
-    - npm install -g mocha coffeescript
+    - npm install -g mocha coffee-script
 
 test:
   override:
