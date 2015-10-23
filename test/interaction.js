@@ -333,18 +333,18 @@ describe('Interaction', function() {
       this.timeout(10000) // could take a while
       this.slow(3000) // more of the same /\
       _this.interaction.search_wolfram("time", function(err, data) {
+        date = new Date()
 
         // look for hours
-        hours = new Date().getHours() % 12
-        console.log(data, hours)
+        hours = date.getHours() % 12
         assert.notEqual(data.indexOf(hours), -1)
 
         // look for minutes
-        min = new Date().getMinutes()
+        min = date.getMinutes()
         assert.notEqual(data.indexOf(min), -1)
 
         // look for am/pm
-        merid = new Date().getHours() > 12 ? "pm" : "am"
+        merid = date.getHours() > 12 ? "pm" : "am"
         assert.notEqual(data.indexOf(merid), -1)
 
         done()
