@@ -294,7 +294,7 @@ describe('Interaction', function() {
       _this.interaction.removeAllListeners("intent_response")
     })
 
-    it('adds interaction id to an intent', function() {
+    it('adds interaction id and timestamp to an intent', function() {
       formatted = _this.interaction.format_intent({
         outputSpeach: {
           type: "PlainText",
@@ -304,6 +304,7 @@ describe('Interaction', function() {
       })
 
       assert.equal(formatted.interactionId, _this.interaction.id)
+      assert.equal(typeof formatted.timestamp, "number")
     })
   })
 

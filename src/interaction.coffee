@@ -98,9 +98,10 @@ module.exports = class Interaction extends EventEmitter
     @once "intent", (data) -> callback null, data
 
   # format an intent to be sent out as a json object
+  # add interaction id to the response, and timestamp
   format_intent: (intent) ->
-    # add interaction id to the response
     intent.interactionId = @id
+    intent.timestamp = new Date().getTime() # epoch time
     intent
 
   # ----------------------------------------------------------------------------
