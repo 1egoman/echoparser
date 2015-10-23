@@ -64,8 +64,9 @@ app.post "/api/v1/intent", (req, res) ->
     if intent_module
       intent_module interaction, match_skill
     else
-      interaction.form_response false, \
-      "The intent #{match_skill and match_skill.name} has no handler.", true
+      interaction.search_wolfram req.body.phrase, undefined, true
+      # interaction.form_response false, \
+      # "The intent #{match_skill and match_skill.name} has no handler.", true
 
 
 

@@ -5,9 +5,11 @@ async = require "async"
 
 class SkillList extends EventEmitter
 
-  constructor: (@skills_location="./skills") -> @pull()
+  constructor: (@skills_location="./skills", auto_pull=true) -> auto_pull and @pull()
 
   # read skills from file and let others know about it
+  # FIXME how to test this?
+  `/* istanbul ignore next */`
   pull: =>
     @_skills = []
     fs.readdir @skills_location, (err, skill_files) =>
@@ -51,6 +53,7 @@ class SkillList extends EventEmitter
     _skills = []
 
     raw.split('\n').forEach (ln, index) =>
+      ln = ln.replace /[\s]+$/,'' # remote erronious whitespace on right (rtrim)
       switch
 
         # an intent definition

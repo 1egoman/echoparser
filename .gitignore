@@ -3,3 +3,4 @@ node_modules/
 *.swp
 .surround
 npm-debug.log
+dist/
