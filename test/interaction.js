@@ -336,6 +336,7 @@ describe('Interaction', function() {
 
         // look for hours
         hours = new Date().getHours() % 12
+        console.log(data, hours)
         assert.notEqual(data.indexOf(hours), -1)
 
         // look for minutes
@@ -345,8 +346,6 @@ describe('Interaction', function() {
         // look for am/pm
         merid = new Date().getHours() > 12 ? "pm" : "am"
         assert.notEqual(data.indexOf(merid), -1)
-
-        console.log(data, hours, min, merid)
 
         done()
       })
