@@ -37,21 +37,21 @@ describe("get_matching_skills", function() {
   })
 
   it("retrives working matching intent for 'hi test'", function() {
-    skill = ExtractFromSkill("hi test", _this.skill)
-
-    assert.equal(skill.name, "testIntentPlace")
-    assert.equal(skill.raw, "hi test")
-    assert.deepEqual(skill.flags, [])
-    assert.deepEqual(skill.data, {place: "test"})
+    skill = ExtractFromSkill("hi test", _this.skill, function(skill) {
+      assert.equal(skill.name, "testIntentPlace")
+      assert.equal(skill.raw, "hi test")
+      assert.deepEqual(skill.flags, [])
+      assert.deepEqual(skill.data, {place: "test"})
+    })
   })
 
   it("parses numbers in a special way", function() {
-    skill = ExtractFromSkill("foo one", _this.skill)
-
-    assert.equal(skill.name, "testIntent")
-    assert.equal(skill.raw, "foo one")
-    assert.deepEqual(skill.flags, [])
-    assert.deepEqual(skill.data, {bar: 1})
+    skill = ExtractFromSkill("foo one", _this.skill, function(skill) {
+      assert.equal(skill.name, "testIntent")
+      assert.equal(skill.raw, "foo one")
+      assert.deepEqual(skill.flags, [])
+      assert.deepEqual(skill.data, {bar: 1})
+    })
   })
 
 // ------------------------------------------------------------------------------
@@ -59,27 +59,28 @@ describe("get_matching_skills", function() {
 // In this case, notInTemplate isn't in skill.data
 // ------------------------------------------------------------------------------
   it("doesn't contain eronious template variables", function() {
-    skill = ExtractFromSkill("hi world", _this.skill)
-
-    assert.equal(skill.name, "testIntentPlace")
-    assert.equal(skill.raw, "hi world")
-    assert.deepEqual(skill.flags, {})
-    assert.deepEqual(skill.data, {place: "world"})
+    skill = ExtractFromSkill("hi world", _this.skill, function(skill) {
+      assert.equal(skill.name, "testIntentPlace")
+      assert.equal(skill.raw, "hi world")
+      assert.deepEqual(skill.flags, {})
+      assert.deepEqual(skill.data, {place: "world"})
+    })
   })
 
   it("retrives working matching intent for 'hi test'", function() {
-    skill = ExtractFromSkill("is global", _this.skills[1])
-
-    assert.equal(skill.name, "testUtilsGlobal")
-    assert.equal(skill.raw, "is global")
-    assert.deepEqual(skill.flags, {global: true})
-    assert.deepEqual(skill.data, {})
+    skill = ExtractFromSkill("is global", _this.skills[1], function(skill) {
+      assert.equal(skill.name, "testUtilsGlobal")
+      assert.equal(skill.raw, "is global")
+      assert.deepEqual(skill.flags, {global: true})
+      assert.deepEqual(skill.data, {})
+    })
   })
 
 
   it("won't match something that doesn't match at all", function() {
-    skill = ExtractFromSkill("doesn't match", _this.skill)
-    assert.equal(skill, null)
+    ExtractFromSkill("doesn't match", _this.skill, function(skill) {
+      assert.equal(skill, null)
+    })
   })
 
 

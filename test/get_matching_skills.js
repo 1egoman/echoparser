@@ -23,12 +23,12 @@ describe("get_matching_skills", function() {
   })
 
   it("retrives working matching skill for 'foo test'", function() {
-    skill = GetMatchingSkills("foo test", _this.skills)
-
-    assert.equal(skill.name, "testSkill.testIntent")
-    assert.equal(skill.raw, "foo test")
-    assert.deepEqual(skill.flags, [])
-    assert.deepEqual(skill.data, {bar: "test"})
+    skill = GetMatchingSkills("foo test", _this.skills, function(skill) {
+      assert.equal(skill.name, "testSkill.testIntent")
+      assert.equal(skill.raw, "foo test")
+      assert.deepEqual(skill.flags, [])
+      assert.deepEqual(skill.data, {bar: "test"})
+    })
   })
 
   // Won't pass yet. Have to fix `extract_from_skill` tests first.
@@ -38,8 +38,9 @@ describe("get_matching_skills", function() {
   // })
 
   it("won't work when no intents match", function() {
-    skill = GetMatchingSkills("doesn't match", _this.skills)
-    assert.equal(skill, null)
+    skill = GetMatchingSkills("doesn't match", _this.skills, function(skill) {
+      assert.equal(skill, null)
+    })
   })
 
 })
