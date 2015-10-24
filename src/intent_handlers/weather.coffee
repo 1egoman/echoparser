@@ -1,6 +1,7 @@
 
 exports.getWeatherForLocation = (interaction, intent) ->
-  interaction.form_response false, "weather: #{JSON.stringify intent.data}"
+  console.log intent.data.place
+  interaction.form_response false, "weather: #{intent.data.place.raw}"
 
 exports.getWeatherForCurrentLocation = (interaction, intent) ->
-  interaction.form_response false, "weather: #{JSON.stringify intent.data}"
+  interaction.form_response false, "weather: #{intent.data}"

@@ -1,45 +1,87 @@
 _ = require "underscore"
 text_to_num = require 'text-to-number'
 templ = require "./templ"
+Promise = require "promise"
+async = require "async"
 
 # given a skill and a phrase extract the data and the intent name
-module.exports = (text, skill) ->
+module.exports = (text, skill, callback) ->
+
   # for each intent, test whether the specified string matches
-  intents = for int in skill.intents
+  async.map skill.intents, (int, done_intent) ->
 
     # get first truthy utterance (determine which utterance the user used)
     # TODO this could be made a lot more efficient
-    data = _.chain(int.utterances).map (utt) =>
+    utterances = _.chain(int.utterances).map (utt) =>
       templ.extract(utt) text
-    .find (a) => a
+    .filter (a) =>
+      if typeof a is 'object'
+        a
+      else
+        false
     .value()
 
-
-    if data
-      name: int.intent
-      raw: text
-
-      # a total workaround, but if something is in the utils skill then it's
-      # global. (if it's said the context will switch to its skill from anywhere)
-      flags: if skill.name is "utils" then global: true else []
-      data: do (data) =>
-        # coerse all data types to their proper values
-        _.mapObject int.templ, (v, k) =>
-
-          # a number, but in a textual format (like fifty five)
-          # this is converted back to its numerical representation (like 55)
-          if v.type.toString().indexOf("function Number()") isnt -1 and k of data and isNaN parseFloat data[k]
-            data[k] = text_to_num data[k]
-
-          # manual coersion (like Number('5') for example)
-          else if k of data
-            data[k] = v.type(data[k])
-
-          # not in the types list? remove it.
-          else delete data[k]
-        data
+    # if there are utterances, return them
+    # otherwise, try again with the next intent
+    if utterances.length and data = utterances[0]
+      done_intent null,
+        utterances: data
+        intent: int
     else
-      null
-  
-  intents.length and _.compact(intents)[0] or null # return first element or null
+      done_intent null
 
+
+  , (err, intents) ->
+    # remove all the nulls from above
+    intents = _.compact intents
+   
+    # there was a matching intent!
+    if intents.length
+
+      # shorten the two property values to make them easier to access
+      int = intents[0].intent
+      data = intents[0].utterances
+
+      # coerse all data types to their proper values
+      async.map Object.keys(int.templ), (k, done) =>
+        v = int.templ[k]
+
+        # a number, but in a textual format (like fifty five)
+        # this is converted back to its numerical representation (like 55)
+        if v.type.toString().indexOf("function Number()") isnt -1 and k of data and isNaN parseFloat data[k]
+          data[k] = text_to_num data[k]
+          done null
+
+        # manual coersion (like Number('5') for example)
+        else if k of data
+          data[k] = v.type(data[k])
+
+          # returned a promise?
+          if data[k] instanceof Promise
+            # wait for the promise, then continue looping
+            data[k].then (resp) ->
+              data[k] = resp
+              done null
+            .catch done
+          else
+            # didn't return a promise, so we're done.
+            done null
+
+        # not in the types list? remove it.
+        else
+          delete data[k]
+          done null
+      , (err) ->
+
+        callback
+          # send it out
+          name: int.intent
+          raw: text
+
+          # a total workaround, but if something is in the utils skill then it's
+          # global. (if it's said the context will switch to its skill from anywhere)
+          flags: if skill.name is "utils" then global: true else []
+          data: data
+    else
+      # no matching intent
+      callback null

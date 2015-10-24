@@ -44,29 +44,29 @@ app.post "/api/v1/intent", (req, res) ->
   skills_emitter.once "pull", (skills) ->
 
     # find the intent
-    match_skill = EchoLib.get_matching_skills req.body.phrase, skills
+    EchoLib.get_matching_skills req.body.phrase, skills, (match_skill) ->
 
-    # create the interaction
-    interaction = new Interaction
-    interaction_container.push interaction
-    interaction.emit "intent", match_skill
+      # create the interaction
+      interaction = new Interaction
+      interaction_container.push interaction
+      interaction.emit "intent", match_skill
 
-    # do the action
-    # look in intent_handles for the correctly named skill file
-    # and then get the intent from inside
-    intent_module = get_intent_fn match_skill
+      # do the action
+      # look in intent_handles for the correctly named skill file
+      # and then get the intent from inside
+      intent_module = get_intent_fn match_skill
 
-    # wait for a response and go with it
-    interaction.once "intent_response", (resp) ->
-      res.send interaction.format_intent resp
+      # wait for a response and go with it
+      interaction.once "intent_response", (resp) ->
+        res.send interaction.format_intent resp
 
-    # run the intent
-    if intent_module
-      intent_module interaction, match_skill
-    else
-      interaction.search_wolfram req.body.phrase, undefined, true
-      # interaction.form_response false, \
-      # "The intent #{match_skill and match_skill.name} has no handler.", true
+      # run the intent
+      if intent_module
+        intent_module interaction, match_skill
+      else
+        interaction.search_wolfram req.body.phrase, undefined, true
+        # interaction.form_response false, \
+        # "The intent #{match_skill and match_skill.name} has no handler.", true
 
 
 
@@ -89,27 +89,27 @@ app.post "/api/v1/intent/:id", (req, res) ->
       return res.send error: "bad.interaction.id"
 
     # find the intent
-    match_skill = EchoLib.get_matching_skills req.body.phrase, skills
+    EchoLib.get_matching_skills req.body.phrase, skills, (match_skill) ->
 
-    # wait for a response and go with it
-    interaction.once "intent_response", (resp) ->
-      # is the interaction complete?
-      # clear it from the buffer then.
-      if resp.shouldEndSession
-        interaction_container = _.without interaction_container, interaction
-      # send it out
-      res.send interaction.format_intent resp
+      # wait for a response and go with it
+      interaction.once "intent_response", (resp) ->
+        # is the interaction complete?
+        # clear it from the buffer then.
+        if resp.shouldEndSession
+          interaction_container = _.without interaction_container, interaction
+        # send it out
+        res.send interaction.format_intent resp
 
-    # how should we handle the event?
-    # if it's a global event, then call that skill and don't continue with the
-    # current one.
-    if match_skill.flags?.global?
-      console.log "running global #{match_skill.name}..."
-      intent_module = get_intent_fn match_skill
-      intent_module interaction, match_skill
-    else
-      # send the intent to the interaction
-      interaction.emit "intent", match_skill
+      # how should we handle the event?
+      # if it's a global event, then call that skill and don't continue with the
+      # current one.
+      if match_skill.flags?.global?
+        console.log "running global #{match_skill.name}..."
+        intent_module = get_intent_fn match_skill
+        intent_module interaction, match_skill
+      else
+        # send the intent to the interaction
+        interaction.emit "intent", match_skill
 
 
 PORT = process.env.PORT or 7000

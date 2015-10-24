@@ -1,7 +1,9 @@
 fs = require "fs"
 path = require "path"
 async = require "async"
+request = require "request"
 {EventEmitter} = require "events"
+Promise = require "promise"
 
 class SkillList extends EventEmitter
 
@@ -151,3 +153,27 @@ WhenDuration = (phrase) ->
     date
   else
     chrono.parse "in #{phrase}" # this makes the parser return a better result sometimes
+
+# a place
+# this will turn a place / location into an objecy containing:
+# - the original phrase (raw)
+# - the latitude (geo.lat)
+# - the longitude (geo.lng)
+Place = (phrase) ->
+  new Promise (resolve, reject) ->
+    if process.env.GOOGLE_MAPS_GEOCODE_KEY
+
+      # use the google maps geolocation api
+      request """
+      https://maps.googleapis.com/maps/api/geocode/json
+      ?address=#{phrase}
+      &key=#{process.env.GOOGLE_MAPS_GEOCODE_KEY}
+      """.replace(/[\n]/, '')
+      , (err, resp, body) ->
+        console.log body
+        resolve
+          raw: phrase
+          body: body
+
+    else
+      reject "No Google Maps geolocation key provided. Please provide one in GOOGLE_MAPS_GEOCODE_KEY."

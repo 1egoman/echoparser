@@ -6,7 +6,7 @@ weather.getWeatherForLocation
   the weather in {place}
   weather {place}
   ---
-  place: String
+  place: Place
 
 weather.getWeatherForCurrentLocation
   weather here
