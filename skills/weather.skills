@@ -1,0 +1,18 @@
+
+weather.getWeatherForLocation
+  weather in {place}
+  weather {place}
+  what is the weather in {place}
+  the weather in {place}
+  weather {place}
+  ---
+  place: String
+
+weather.getWeatherForCurrentLocation
+  weather here
+  weather for this place
+  weather now
+  weather right now
+  weather
+  ---
+
