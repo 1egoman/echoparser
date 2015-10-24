@@ -1,5 +1,28 @@
 
-weather.getWeatherForLocation
+weather.getWeatherForCurrentLocationNow
+  weather here
+  weather for this place
+  weather now
+  weather right now
+  weather
+  ---
+
+weather.getRainForLocationNow
+  rain in {place}
+  rain {place}
+  is it raining in {place}
+  raining in {place}
+  precipitation in {place}
+  precipitation {place}
+  snow {place}
+  snow in {place}
+  snowing in {place}
+  is it snowing in {place}
+  ---
+  place: Place
+
+
+weather.getWeatherForLocationNow
   weather in {place}
   weather {place}
   what is the weather in {place}
@@ -7,12 +30,4 @@ weather.getWeatherForLocation
   weather {place}
   ---
   place: Place
-
-weather.getWeatherForCurrentLocation
-  weather here
-  weather for this place
-  weather now
-  weather right now
-  weather
-  ---
 

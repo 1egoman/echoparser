@@ -161,19 +161,26 @@ WhenDuration = (phrase) ->
 # - the longitude (geo.lng)
 Place = (phrase) ->
   new Promise (resolve, reject) ->
-    if process.env.GOOGLE_MAPS_GEOCODE_KEY
+    if process.env.GOOGLE_MAPS_APP_GEOCODE_KEY
 
       # use the google maps geolocation api
       request """
       https://maps.googleapis.com/maps/api/geocode/json
       ?address=#{phrase}
-      &key=#{process.env.GOOGLE_MAPS_GEOCODE_KEY}
+      &key=#{process.env.GOOGLE_MAPS_APP_GEOCODE_KEY}
       """.replace(/[\n]/, '')
       , (err, resp, body) ->
-        console.log body
-        resolve
-          raw: phrase
-          body: body
+        body = JSON.parse body
+
+        if body.status is 'OK'
+          results = body.results[0]
+          resolve
+            raw: phrase
+            formatted: results.formatted_address
+            geo: results.geometry.location
+            body: body
+        else
+          resolve raw: phrase
 
     else
       reject "No Google Maps geolocation key provided. Please provide one in GOOGLE_MAPS_GEOCODE_KEY."
