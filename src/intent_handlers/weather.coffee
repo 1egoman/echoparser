@@ -35,17 +35,19 @@ resolve_forecast = (weather, time, resolution) ->
 
 
 
-
+# this function abstracts all of the weather logic into a seperate container
 get_weather_at = (time, resolution, response) ->
   (interaction, intent) ->
     get_conditions_at intent.data.place.geo
     .then (weather) ->
 
+      # override the time if it is falsey
+      time or= intent.data.time
+
       # get the closest condition to the point of reference
       conditions = resolve_forecast weather, time, resolution
 
       # format the forecast
-      # "It is 50 degrees and partly cloudy in New York."
       interaction.form_response false, strip_n(response(conditions, intent)), true
 
     # error?
@@ -53,46 +55,15 @@ get_weather_at = (time, resolution, response) ->
       interaction.form_response false, error
 
 
-exports.getWeatherForLocationNow = (interaction, intent) ->
-  get_conditions_at intent.data.place.geo
-  .then (weather) ->
-
-    # get the closest condition to the point of reference
-    conditions = resolve_forecast weather, new Date, "hourly"
-
-    # format the forecast
-    # "It is 50 degrees and partly cloudy in New York."
-    interaction.form_response false, \
-      strip_n("""It is currently #{conditions.temperature} degrees 
-      and #{conditions.summary} in #{intent.data.place.formatted}."""), true
-
-  # error?
-  .catch (error) ->
-    interaction.form_response false, error
-
+# "It is 50 degrees and partly cloudy in New York."
+exports.getWeatherForLocationNow = get_weather_at new Date, "hourly", (conditions, intent) ->
+    """It is currently #{conditions.temperature} degrees 
+    and #{conditions.summary} in #{intent.data.place.formatted}."""
 
 exports.getRainForLocationNow = get_weather_at new Date, "hourly", (conditions, intent) ->
   """There is currently a 
   #{conditions.precipProbability * 100} percent chance of precipitation 
   in #{intent.data.place.formatted}."""
-
-# exports.getRainForLocationNow = (interaction, intent) ->
-#   get_conditions_at intent.data.place.geo
-#   .then (weather) ->
-#
-#     # get the closest condition to the point of reference
-#     conditions = resolve_forecast weather, new Date, "hourly"
-#
-#     # format the response
-#     interaction.form_response false, \
-#       strip_n("""There is currently a 
-#       #{conditions.precipProbability * 100} percent chance of precipitation 
-#       in #{intent.data.place.formatted}."""), true
-#
-#   # error?
-#   .catch (error) ->
-#     interaction.form_response false, error
-
 
 exports.getWeatherForCurrentLocationNow = (interaction, intent) ->
   interaction.form_response false, "Work in progress."

@@ -5,6 +5,7 @@ weather.getWeatherForCurrentLocationNow
   weather now
   weather right now
   weather
+  weather forecast
   ---
 
 weather.getRainForLocationNow
@@ -18,6 +19,12 @@ weather.getRainForLocationNow
   snow in {place}
   snowing in {place}
   is it snowing in {place}
+  will i need an umbrella in {place}
+  will i need an umbrella at {place}
+  need an umbrella at {place}
+  umbrella at {place}
+  umbrella in {place}
+  umbrella {place}
   ---
   place: Place
 

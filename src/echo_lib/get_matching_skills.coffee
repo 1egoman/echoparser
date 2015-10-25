@@ -4,9 +4,11 @@ async = require "async"
 
 # iterate through a list of skills and only parse the elements that match
 module.exports = (text, skills, callback) ->
+  count = 0
 
   async.map skills, (s, done) ->
     extract_from_skill text, s, (match) ->
+      count++
       if match
 
         # if there are no matches, then return null. Otherwise,
@@ -21,4 +23,8 @@ module.exports = (text, skills, callback) ->
 
       else
         done null
+  , (err) ->
+    # no matching skills
+    if count >= skills.length
+      callback null
 

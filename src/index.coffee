@@ -45,6 +45,7 @@ app.post "/api/v1/intent", (req, res) ->
 
     # find the intent
     EchoLib.get_matching_skills req.body.phrase, skills, (match_skill) ->
+      console.log req.body.phrase
 
       # create the interaction
       interaction = new Interaction
