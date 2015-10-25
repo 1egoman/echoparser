@@ -46,11 +46,11 @@ get_weather_at = (time, resolution, response) ->
 
       # format the forecast
       # "It is 50 degrees and partly cloudy in New York."
-      interaction.form_response false, strip_n(response(conditions)), true
+      interaction.form_response false, strip_n(response(conditions, intent)), true
 
-  # error?
-  .catch (error) ->
-    interaction.form_response false, error
+    # error?
+    .catch (error) ->
+      interaction.form_response false, error
 
 
 exports.getWeatherForLocationNow = (interaction, intent) ->
@@ -71,22 +71,27 @@ exports.getWeatherForLocationNow = (interaction, intent) ->
     interaction.form_response false, error
 
 
-exports.getRainForLocationNow = (interaction, intent) ->
-  get_conditions_at intent.data.place.geo
-  .then (weather) ->
+exports.getRainForLocationNow = get_weather_at new Date, "hourly", (conditions, intent) ->
+  """There is currently a 
+  #{conditions.precipProbability * 100} percent chance of precipitation 
+  in #{intent.data.place.formatted}."""
 
-    # get the closest condition to the point of reference
-    conditions = resolve_forecast weather, new Date, "hourly"
-
-    # format the response
-    interaction.form_response false, \
-      strip_n("""There is currently a 
-      #{conditions.precipProbability * 100} percent chance of precipitation 
-      in #{intent.data.place.formatted}."""), true
-
-  # error?
-  .catch (error) ->
-    interaction.form_response false, error
+# exports.getRainForLocationNow = (interaction, intent) ->
+#   get_conditions_at intent.data.place.geo
+#   .then (weather) ->
+#
+#     # get the closest condition to the point of reference
+#     conditions = resolve_forecast weather, new Date, "hourly"
+#
+#     # format the response
+#     interaction.form_response false, \
+#       strip_n("""There is currently a 
+#       #{conditions.precipProbability * 100} percent chance of precipitation 
+#       in #{intent.data.place.formatted}."""), true
+#
+#   # error?
+#   .catch (error) ->
+#     interaction.form_response false, error
 
 
 exports.getWeatherForCurrentLocationNow = (interaction, intent) ->
