@@ -12,6 +12,11 @@ Still a few unanswered questions though:
 - Home automation-y stuff
   - We don't really need this in a proof of concept
 
+## Some ideas
+- Direct guests somewhere.
+- Weather/Time/etc...
+- Audio/Music/Podcasts/Radio...
+
 ## License
 Copyright (c) 2015 Ryan Gaus (1egoman)
 
