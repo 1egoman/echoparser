@@ -16,6 +16,7 @@ Still a few unanswered questions though:
 - Direct guests somewhere.
 - Weather/Time/etc...
 - Audio/Music/Podcasts/Radio...
+- <https://gist.github.com/1egoman/b1c520670ba565f96421>
 
 ## License
 Copyright (c) 2015 Ryan Gaus (1egoman)
