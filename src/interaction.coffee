@@ -42,6 +42,7 @@ module.exports = class Interaction extends EventEmitter
         intent: intent
 
     @DEBUG = opts.debug
+    console.log opts
 
   # ----------------------------------------------------------------------------
   # Methods to respond to an intent with

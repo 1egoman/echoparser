@@ -43,8 +43,13 @@ var query = function(phrase, store) {
   if (localStorage && store !== false) localStorage.phrase = phrase
 
   // query the server
-  ws.send(JSON.stringify({
-    id: interactionId ? interactionId : undefined,
-    phrase: phrase
-  }))
+  if (ws.readyState === 1) {
+    ws.send(JSON.stringify({
+      id: interactionId ? interactionId : undefined,
+      phrase: phrase
+    }))
+  } else {
+    // reload the app so it will reconnect
+    location.reload()
+  }
 }
