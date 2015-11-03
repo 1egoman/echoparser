@@ -1,0 +1,40 @@
+
+weather.getWeatherForCurrentLocationNow
+  weather here
+  weather for this place
+  weather now
+  weather right now
+  weather
+  weather forecast
+  ---
+
+weather.getRainForLocationNow
+  rain in {place}
+  rain {place}
+  is it raining in {place}
+  raining in {place}
+  precipitation in {place}
+  precipitation {place}
+  snow {place}
+  snow in {place}
+  snowing in {place}
+  is it snowing in {place}
+  will i need an umbrella in {place}
+  will i need an umbrella at {place}
+  need an umbrella at {place}
+  umbrella at {place}
+  umbrella in {place}
+  umbrella {place}
+  ---
+  place: Place
+
+
+weather.getWeatherForLocationNow
+  weather in {place}
+  weather {place}
+  what is the weather in {place}
+  the weather in {place}
+  weather {place}
+  ---
+  place: Place
+

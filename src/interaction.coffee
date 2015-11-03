@@ -19,7 +19,7 @@ wolfram = require("wolfram").createClient process.env.WOLFRAM_APP_KEY
 # ------------------------------------------------------------------------------
 module.exports = class Interaction extends EventEmitter
 
-  constructor: (opts={}) ->
+  constructor: (opts={debug: true})->
     @id = uuid.v4()
     @intents = []
     @ws = opts.ws or null
@@ -41,7 +41,7 @@ module.exports = class Interaction extends EventEmitter
         datestamp: new Date()
         intent: intent
 
-    @DEBUG = true
+    @DEBUG = opts.debug
 
   # ----------------------------------------------------------------------------
   # Methods to respond to an intent with
@@ -69,43 +69,49 @@ module.exports = class Interaction extends EventEmitter
 
   # a raw response
   raw_response: (data) ->
+    # were we passed something that wasn't an object?
+    if not _.isObject data
+      false
+    else
 
-    # audio changes we should be logging?
-    # we want to know what the playlist of tracks looks like device-side
-    if data.outputAudio
-      if data.outputAudio.type.indexOf("playlist") isnt -1
-        @remote.playlist = data.outputAudio
-      else
-        @remote.playlist = [data.outputAudio]
-
-    # also, log any new actions that have changed states
-    if data.actions
-      for k,v of data.actions
-        if v.state
-          @remote.state[k] = v
+      # audio changes we should be logging?
+      # we want to know what the playlist of tracks looks like device-side
+      if data.outputAudio
+        if data.outputAudio.type.indexOf("Playlist") isnt -1
+          @remote.playlist = data.outputAudio.playlist
         else
-          delete @remote.state[k]
+          @remote.playlist = [data.outputAudio]
 
-    # finally, emit the event
-    @emit "intent_response", data
+      # also, log any new actions that have changed states
+      if data.actions
+        for k,v of data.actions
+          if _.isObject v
+            @remote.state[k] = v
+          else if _.isObject v
+            delete @remote.state[k]
+          else false
+
+      # finally, emit the event
+      @emit "intent_response", data
 
   # wait for a new intent and feed it to whoever asks
   await_response: (opts={}, callback) ->
     @once "intent", (data) -> callback null, data
 
   # format an intent to be sent out as a json object
+  # add interaction id to the response, and timestamp
   format_intent: (intent) ->
-    # add interaction id to the response
     intent.interactionId = @id
+    intent.timestamp = new Date().getTime() # epoch time
     intent
 
   # ----------------------------------------------------------------------------
   # pass the query on to wolfram alpha
   # ----------------------------------------------------------------------------
-  search_wolfram: (phrase, callback) ->
+  search_wolfram: (phrase, callback, end_session=false) ->
     # wolfram parsing function
     parse_wolfram_results = (results) ->
-      pod = _.find results, (i) -> i.title is "Result"
+      pod = _.find results, (i) -> i.primary is true
       if pod
         pod.subpods[0].value
 
@@ -114,9 +120,9 @@ module.exports = class Interaction extends EventEmitter
         # just send the data back to the user
         callback err, parse_wolfram_results(result), result
       else if not err
-        @form_response true, parse_wolfram_results result
+        @form_response true, parse_wolfram_results(result), end_session
       else
-        @form_response true, "Wolfram Alpha errored: #{err}"
+        @form_response true, "Wolfram Alpha errored: #{err}", end_session
 
 
   # ----------------------------------------------------------------------------
@@ -125,14 +131,17 @@ module.exports = class Interaction extends EventEmitter
   # actions.
   # ----------------------------------------------------------------------------
   audio_response: (status, audio_data, text=null, end_session=false) ->
-    audio_data.type = "AudioLink"
-    @raw_response
-      outputSpeach: (if text
-        type: "PlainText"
-        text: text
-      else undefined)
-      outputAudio: audio_data
-      shouldEndSession: end_session
+    if _.isObject audio_data
+      audio_data.type = "AudioLink"
+      @raw_response
+        outputSpeach: (if text
+          type: "PlainText"
+          text: text
+        else undefined)
+        outputAudio: audio_data
+        shouldEndSession: end_session
+    else
+      false
 
   # ----------------------------------------------------------------------------
   # Stream a list of media to a device
@@ -141,21 +150,23 @@ module.exports = class Interaction extends EventEmitter
   # "name", "artist", and "src" at minimum.
   # ----------------------------------------------------------------------------
   audio_playlist_response: (status, audio_playlist, text=null, end_session=false) ->
-    @raw_response
-      outputSpeach: (if text
-        type: "PlainText"
-        text: text
-      else undefined)
-      outputAudio:
-        type: "AudioLinkPlaylist"
-        playlist: do (audio_playlist) =>
-          results = []
-          audio_playlist.forEach (p) =>
-            if p.name and p.src
-              results.push p
-          results
-      shouldEndSession: end_session
-
+    if _.isArray audio_playlist
+      @raw_response
+        outputSpeach: (if text
+          type: "PlainText"
+          text: text
+        else undefined)
+        outputAudio:
+          type: "AudioLinkPlaylist"
+          playlist: do (audio_playlist) =>
+            results = []
+            audio_playlist.forEach (p) =>
+              if p.name and p.src
+                results.push p
+            results
+        shouldEndSession: end_session
+    else
+      false
 
   # debug logging
   emit: ->

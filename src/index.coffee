@@ -45,8 +45,6 @@ wss.on "connection", (ws) ->
       ,
         send: (data) -> ws.send JSON.stringify(data)
 
-
-
 PORT = process.env.PORT or 7000
 app.listen PORT, ->
   console.log "-> #{PORT}"

@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "coffee src/index.coffee"
+    "test": "coffee -c -o dist/ src/ && NODE_ENV=test mocha",
+    "start": "coffee src/index.coffee",
+    "coverage": "coffee -c -o dist/ src/ && istanbul cover _mocha -- -R spec"
   },
   "author": "",
   "license": "MIT",
@@ -18,6 +19,8 @@
     "ejs": "^2.3.4",
     "express": "^4.13.3",
     "moment": "^2.10.6",
+    "forecast.io": "0.0.9",
+    "promise": "^7.0.4",
     "request": "^2.65.0",
     "spotify-web-api-node": "^2.1.0",
     "text-to-number": "0.0.0",

@@ -1,0 +1,10 @@
+
+dependencies:
+  cache_directories:
+    - node_modules/
+  pre:
+    - npm install -g mocha coffee-script
+
+test:
+  override:
+    - npm test

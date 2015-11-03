@@ -1,19 +1,30 @@
 _ = require "underscore"
 extract_from_skill  = require "./extract_from_skill"
+async = require "async"
 
 # iterate through a list of skills and only parse the elements that match
-module.exports = (text, skills) ->
-  matches = _.compact(for s in skills
-    if match = extract_from_skill text, s
-      name: s.name
-      intent: match
-  )
+module.exports = (text, skills, callback) ->
+  count = 0
 
-  # if there are no matches, then return null. Otherwise,
-  # compose the intent and skill name together and return the whole thing.
-  if matches.length is 0
-    null
-  else
-    do (m=matches[0]) ->
-      m.intent.name = "#{m.name}.#{m.intent.name}" # skill.intent
-      m.intent
+  async.map skills, (s, done) ->
+    extract_from_skill text, s, (match) ->
+      count++
+      if match
+
+        # if there are no matches, then return null. Otherwise,
+        # compose the intent and skill name together and return the whole thing.
+        callback do (match) ->
+          match.name = "#{s.name}.#{match.name}" # skill.intent
+          match
+
+        # return an error to break out of the loop
+        done true
+
+
+      else
+        done null
+  , (err) ->
+    # no matching skills
+    if count >= skills.length
+      callback null
+

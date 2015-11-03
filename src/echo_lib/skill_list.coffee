@@ -1,13 +1,17 @@
 fs = require "fs"
 path = require "path"
 async = require "async"
+request = require "request"
 {EventEmitter} = require "events"
+Promise = require "promise"
 
 class SkillList extends EventEmitter
 
-  constructor: (@skills_location="./skills") -> @pull()
+  constructor: (@skills_location="./skills", auto_pull=true) -> auto_pull and @pull()
 
   # read skills from file and let others know about it
+  # FIXME how to test this?
+  `/* istanbul ignore next */`
   pull: =>
     @_skills = []
     fs.readdir @skills_location, (err, skill_files) =>
@@ -51,6 +55,7 @@ class SkillList extends EventEmitter
     _skills = []
 
     raw.split('\n').forEach (ln, index) =>
+      ln = ln.replace /[\s]+$/,'' # remote erronious whitespace on right (rtrim)
       switch
 
         # an intent definition
@@ -148,3 +153,34 @@ WhenDuration = (phrase) ->
     date
   else
     chrono.parse "in #{phrase}" # this makes the parser return a better result sometimes
+
+# a place
+# this will turn a place / location into an objecy containing:
+# - the original phrase (raw)
+# - the latitude (geo.lat)
+# - the longitude (geo.lng)
+Place = (phrase) ->
+  new Promise (resolve, reject) ->
+    if process.env.GOOGLE_MAPS_APP_GEOCODE_KEY
+
+      # use the google maps geolocation api
+      request """
+      https://maps.googleapis.com/maps/api/geocode/json
+      ?address=#{phrase}
+      &key=#{process.env.GOOGLE_MAPS_APP_GEOCODE_KEY}
+      """.replace(/[\n]/, '')
+      , (err, resp, body) ->
+        body = JSON.parse body
+
+        if body.status is 'OK'
+          results = body.results[0]
+          resolve
+            raw: phrase
+            formatted: results.formatted_address
+            geo: results.geometry.location
+            body: body
+        else
+          resolve raw: phrase
+
+    else
+      reject "No Google Maps geolocation key provided. Please provide one in GOOGLE_MAPS_GEOCODE_KEY."
