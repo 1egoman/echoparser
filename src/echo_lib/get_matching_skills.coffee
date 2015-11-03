@@ -8,7 +8,6 @@ module.exports = (text, skills, callback) ->
 
   async.map skills, (s, done) ->
     extract_from_skill text, s, (match) ->
-      count++
       if match
 
         # if there are no matches, then return null. Otherwise,
@@ -22,6 +21,7 @@ module.exports = (text, skills, callback) ->
 
 
       else
+        count++
         done null
   , (err) ->
     # no matching skills
