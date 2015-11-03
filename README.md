@@ -12,6 +12,22 @@ Still a few unanswered questions though:
 - Home automation-y stuff
   - We don't really need this in a proof of concept
 
+## Rough API Docs
+```
+Connect to ws://127.0.0.1:7070
+-> {
+  phrase: "start of interaction"
+}
+<- {
+  id: "interaction id",
+  // rest of response
+}
+-> {
+  id: "interaction id",
+  phrase: "next step of interaction"
+}
+```
+
 ## License
 Copyright (c) 2015 Ryan Gaus (1egoman)
 
