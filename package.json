@@ -20,6 +20,8 @@
     "express": "^4.13.3",
     "forecast.io": "0.0.9",
     "promise": "^7.0.4",
+    "google-auth-library": "^0.9.6",
+    "googleapis": "^2.1.6",
     "request": "^2.65.0",
     "spotify-web-api-node": "^2.1.0",
     "text-to-number": "0.0.0",
