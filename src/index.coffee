@@ -31,7 +31,7 @@ app.get "/oauth", (req, res) ->
         """
         <li>
           <strong>#{i.name}</strong>
-          <span>#{i.token}</span>
+          <span>#{JSON.stringify(i.token, null, 2)}</span>
         </li>
         """
       else

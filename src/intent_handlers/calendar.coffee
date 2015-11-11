@@ -23,6 +23,9 @@ oauth = exports.oauth =
       redirect_uri
     )
 
+    # check for token and set if it exists
+    if @token then @oauth2.credentials = @token
+
   getName: -> "Google Calendar"
 
   # where to redirect the user to for the first step of oauth
@@ -33,9 +36,14 @@ oauth = exports.oauth =
 
   # given a request object, extract the token
   getToken: (req) ->
-    token = req.query.code
-    @oauth2.credentials = token
-    token
+    new Promise (resolve, reject) =>
+      token = req.query.code
+      @oauth2.getToken token, (err, @token) =>
+        if err
+          reject err.toString()
+        else
+          @oauth2.credentials = @token
+          resolve @token
 
 
 ###*
@@ -68,5 +76,3 @@ exports.listEvents = (interaction, intent) ->
         start = event.start.dateTime or event.start.date
         console.log '%s - %s', start, event.summary
         i++
-    return
-  return

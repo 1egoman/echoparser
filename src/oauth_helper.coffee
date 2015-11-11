@@ -62,15 +62,19 @@ exports.register_token = (req, res) ->
     return res.status(400).send "No such intent '#{req.params.name}'"
 
   # return the token from the request
-  token = oauth.getToken(req)
+  oauth.getToken(req).then (token) ->
 
-  # save it
-  exports.save_token(req.params.name, token)
-  .then(-> res.redirect "/oauth")
-  .catch((err) -> res.send error: err)
+    # save it
+    exports.save_token(req.params.name, token)
+    .then(-> res.redirect "/oauth")
+    .catch((err) -> res.send error: err)
+
+  .catch (err) ->
+    res.send error: err
 
 # save a token to file
 exports.save_token = (name, token) ->
+  console.log name, token
   new Promise (resolve, reject) ->
     obj = {
       name: name,
