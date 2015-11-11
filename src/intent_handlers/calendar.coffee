@@ -45,34 +45,27 @@ oauth = exports.oauth =
           @oauth2.credentials = @token
           resolve @token
 
-
-###*
-# Lists the next 10 events on the user's primary calendar.
-#
-# @param {google.auth.OAuth2} auth An authorized OAuth2 client.
-###
-
-exports.listEvents = (interaction, intent) ->
+# get calendar events for the next day
+exports.listUpcomingEvents = (interaction, intent) ->
   calendar = google.calendar('v3')
   calendar.events.list {
     auth: oauth.oauth2
-    calendarId: 'primary'
-    timeMin: (new Date).toISOString()
+
+    calendarId: intent.data.calendar or 'primary'
+    timeMin: new Date().toISOString()
+    timeMax: new Date(new Date().getTime() + 86400).toISOString() # one day from the start
     maxResults: 10
     singleEvents: true
     orderBy: 'startTime'
   }, (err, response) ->
     if err
-      console.log 'The API returned an error: ' + err
-      return
-    events = response.items
-    if events.length == 0
-      console.log 'No upcoming events found.'
+      interaction.form_response true, "Google Calendar returned an error: #{err}", true
     else
-      console.log 'Upcoming 10 events:'
-      i = 0
-      while i < events.length
-        event = events[i]
+      response = response.items.map (event) ->
         start = event.start.dateTime or event.start.date
-        console.log '%s - %s', start, event.summary
-        i++
+        "#{event.summary} at #{start}"
+
+      if response.length
+        interaction.form_response false, response.join(', '), true
+      else
+        interaction.form_response false, "No events for the next day are on your calendar.", true
