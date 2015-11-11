@@ -6,7 +6,7 @@ async = require "async"
 # return all clients that require oauth to work
 exports.get_oauth_clients = ->
   new Promise (resolve, reject) ->
-    fs.readdir "./src/intent_handlers", (err, dir) ->
+    fs.readdir path.join("src", "intent_handlers"), (err, dir) ->
       if err
         reject err
       else
@@ -19,7 +19,7 @@ exports.get_oauth_clients = ->
             {oauth} = require "./intent_handlers/#{i}"
           catch
             # no module of that name exists
-            return false
+            return cb null, false
 
           if oauth
             exports.read_token(i).then (data) ->
@@ -28,6 +28,7 @@ exports.get_oauth_clients = ->
                 name: oauth.getName()
                 module: oauth
                 token: data.token
+
             .catch (err) ->
               cb null,
                 raw_name: i
@@ -55,14 +56,16 @@ exports.init_oauth_clients = (base_url) ->
       c.module.token = c.token
       c.module.init redirect_uri
 
+# a new token is received
 exports.register_token = (req, res) ->
   try
-    {oauth} = require "./intent_handlers/#{req.params.name}"
+    {oauth} = require "./intent_handlers/#{path.normalize req.params.name}"
   catch
     return res.status(400).send "No such intent '#{req.params.name}'"
 
   # return the token from the request
   oauth.getToken(req).then (token) ->
+    console.log token
 
     # save it
     exports.save_token(req.params.name, token)
@@ -74,7 +77,6 @@ exports.register_token = (req, res) ->
 
 # save a token to file
 exports.save_token = (name, token) ->
-  console.log name, token
   new Promise (resolve, reject) ->
     obj = {
       name: name,

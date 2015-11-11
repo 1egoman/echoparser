@@ -2,6 +2,7 @@ fs = require 'fs'
 readline = require('readline')
 google = require('googleapis')
 googleAuth = require('google-auth-library')
+Promise = require "promise"
 
 SCOPES = ['https://www.googleapis.com/auth/calendar']
 TOKEN_DIR = (
