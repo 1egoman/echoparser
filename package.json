@@ -18,6 +18,7 @@
     "chrono-node": "^1.0.8",
     "ejs": "^2.3.4",
     "express": "^4.13.3",
+    "moment": "^2.10.6",
     "forecast.io": "0.0.9",
     "promise": "^7.0.4",
     "google-auth-library": "^0.9.6",
@@ -28,6 +29,7 @@
     "tunein_scraper": "^1.0.3",
     "underscore": "^1.8.3",
     "uuid": "^2.0.1",
-    "wolfram": "^0.3.2"
+    "wolfram": "^0.3.2",
+    "ws": "^0.8.0"
   }
 }

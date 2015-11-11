@@ -18,6 +18,22 @@ Still a few unanswered questions though:
 - Audio/Music/Podcasts/Radio...
 - <https://gist.github.com/1egoman/b1c520670ba565f96421>
 
+## Rough API Docs
+```
+Connect to ws://127.0.0.1:7070
+-> {
+  phrase: "start of interaction"
+}
+<- {
+  id: "interaction id",
+  // rest of response
+}
+-> {
+  id: "interaction id",
+  phrase: "next step of interaction"
+}
+```
+
 ## License
 Copyright (c) 2015 Ryan Gaus (1egoman)
 
