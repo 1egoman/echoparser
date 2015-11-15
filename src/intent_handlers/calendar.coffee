@@ -20,8 +20,8 @@ oauth = exports.oauth =
   init: (redirect_uri) ->
     @auth = new googleAuth
     @oauth2 = new @auth.OAuth2(
-      "796368167408-9rmitp7n43umec1fmoapdhvolg7tb9mg.apps.googleusercontent.com",
-      "_QzR0qI0FRfBwfV1DGGsjeAM",
+      process.argv.GOOGLE_APP_CLIENTID,
+      process.argv.GOOGLE_APP_SECRET,
       redirect_uri
     )
 
@@ -65,7 +65,6 @@ exports.listUpcomingEvents = (interaction, intent) ->
       singleEvents: true
       orderBy: 'startTime'
     }, (err, response) ->
-      console.log response
       if err
         interaction.form_response true, "Google Calendar returned an error: #{err}", true
       else
