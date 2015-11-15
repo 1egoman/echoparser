@@ -5,9 +5,6 @@ calendar.listUpcomingEvents
   doing today
   events doing today
   what is happining today?
-  ---
-
-calendar.myDay
   what am i doing today
   what am i doing
   events today
@@ -20,7 +17,9 @@ calendar.myDay
   events today
   how does my day look
   how's my day look
+  events today limit {quantity}
   ---
+  quantity: Number
 
 calendar.addEvent
   add {event} to my calendar
@@ -37,6 +36,10 @@ calendar.addEvent
   new event named {event}
   new event {event}
   new event {event}
+  add new event named {event} at {time}
+  add new event named {event}
+  add new event {event}
+  add new event {event}
   ---
   event: String
   time: When
