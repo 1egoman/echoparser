@@ -59,8 +59,11 @@ exports.new_interaction = (req, res) ->
       if intent_module
         intent_module interaction, match_skill
       else
-        interaction.form_response false, \
-        "The intent #{match_skill and match_skill.name} has no handler.", true
+        # when in doubt, search wolfram
+        interaction.search_wolfram req.body.phrase, null, true
+        interaction.form_response false, "Sending request to wolfram alpha...", false
+        # interaction.form_response false, \
+        # "The intent #{match_skill and match_skill.name} has no handler.", false
 
 
 
