@@ -60,7 +60,7 @@ exports.new_interaction = (req, res) ->
 
       # uhh, the code isn't on the filesystem
       if intent_module is false
-        interaction.form_response true, "No such module in `intent_handlers`!!!"
+        interaction.form_response true, "No such module in `intent_handlers`!!!", true
 
       # run the intent
       else if intent_module
