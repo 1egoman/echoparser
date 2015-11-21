@@ -18,7 +18,10 @@ exports.interaction_container = []
 # and then get the intent from inside
 get_intent_fn = (match_skill) ->
   if match_skill
-    skill_module = require "./intent_handlers/#{match_skill.name.split('.')[0]}"
+    try
+      skill_module = require "./intent_handlers/#{match_skill.name.split('.')[0]}"
+    catch e
+      return false
     skill_module[match_skill.name.split('.')[1]]
   else
     null
@@ -55,8 +58,12 @@ exports.new_interaction = (req, res) ->
         interaction.once "intent_response", (resp) ->
           res.send interaction.format_intent resp
 
+      # uhh, the code isn't on the filesystem
+      if intent_module is false
+        interaction.form_response true, "No such module in `intent_handlers`!!!"
+
       # run the intent
-      if intent_module
+      else if intent_module
         intent_module interaction, match_skill
       else
         # when in doubt, search wolfram
