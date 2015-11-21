@@ -84,24 +84,35 @@ exports.listUpcomingEvents = (interaction, intent) ->
 exports.addEvent = (interaction, intent) ->
   if oauth.token
 
+    requesting = false
     event_info =
       name: intent.data.event,
       when: intent.data.time
 
     # get more info for the event if we've got nothing
     get_more_info = (err, intent) ->
-      event_info.name = intent.data.event
-      event_info.when = intent.data.time
+      console.log(1)
+
+      if requesting
+        event_info[requesting] = intent.raw
+      else
+        event_info.name or= intent.data.event
+        event_info.when or= intent.data.time
 
       if not event_info.name
         interaction.form_response false, "What is the name of this event?"
+        requesting = "name"
+        interaction.await_response {}, get_more_info
+        return
 
       else if not event_info.when
-        interaction.form_response false, "Ok, when will this event happen?"
+        interaction.form_response false, "When will this event happen?"
+        requesting = "when"
+        interaction.await_response {}, get_more_info
+        return
 
       else
         # ok, we're good!
-        interaction.form_response false, "Created event"
+        interaction.form_response false, "Created event", true
 
-    interaction.await_response {}, get_more_info
     get_more_info null, intent
