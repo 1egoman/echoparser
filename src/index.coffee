@@ -75,6 +75,7 @@ wss.on "connection", (ws) ->
     else
       continue_interaction
         body: body
+        isWs: on
         params:
           id: body.id
       ,

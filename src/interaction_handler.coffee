@@ -21,6 +21,7 @@ get_intent_fn = (match_skill) ->
     try
       skill_module = require "./intent_handlers/#{match_skill.name.split('.')[0]}"
     catch e
+      console.log(e)
       return false
     skill_module[match_skill.name.split('.')[1]]
   else
@@ -102,12 +103,12 @@ exports.continue_interaction = (req, res) ->
         if resp.shouldEndSession
           exports.interaction_container = _.without exports.interaction_container, interaction
         # send it out
-        res.send interaction.format_intent resp
+        res.send interaction.format_intent resp if not req.isWs
 
       # how should we handle the event?
       # if it's a global event, then call that skill and don't continue with the
       # current one.
-      if match_skill.flags?.global?
+      if match_skill and match_skill.flags?.global?
         console.log "running global #{match_skill.name}..."
         intent_module = get_intent_fn match_skill
         intent_module interaction, match_skill

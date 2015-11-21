@@ -16,7 +16,6 @@ TOKEN_PATH = TOKEN_DIR + 'calendar-nodejs-echoparser.json'
 
 # manage oauth
 oauth = exports.oauth =
-
   init: (redirect_uri) ->
     @auth = new googleAuth
     @oauth2 = new @auth.OAuth2(
@@ -76,6 +75,38 @@ exports.listUpcomingEvents = (interaction, intent) ->
           interaction.form_response false, "Today, you've got #{response.join(', ')}.", true
         else
           interaction.form_response false, "No events for the next day are on your calendar.", true
-
   else
     interaction.form_response false ,"Please give me permission to access Google Calendar.", true
+
+
+
+
+exports.addEvent = (interaction, intent) ->
+  if oauth.token
+
+    # event_info =
+    #   name: intent.data.event,
+    #   when: intent.data.time
+    #
+    # # get more info for the event if we've got nothing
+    # get_more_info = (err, intent) ->
+    #   console.log(err, intent)
+    #   event_info.name = intent.data.event
+    #   event_info.when = intent.data.time
+    #
+    #   if not event_info.name
+    #     interaction.form_response false, "What is the name of this event?"
+    #
+    #   else if not event_info.when
+    #     interaction.form_response false, "Ok, when will this event happen?"
+    #
+    #   else
+    #     # ok, we're good!
+    #     interaction.form_response false, "Created event"
+    #
+    # interaction.await_response {}, get_more_info
+    # get_more_info null, intent
+
+    interaction.form_response false, "What is the name of this event?"
+    interaction.await_response {}, (err, response) ->
+      interaction.form_response false, "yay"
