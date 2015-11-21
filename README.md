@@ -12,6 +12,28 @@ Still a few unanswered questions though:
 - Home automation-y stuff
   - We don't really need this in a proof of concept
 
+## Some ideas
+- Direct guests somewhere.
+- Weather/Time/etc...
+- Audio/Music/Podcasts/Radio...
+- <https://gist.github.com/1egoman/b1c520670ba565f96421>
+
+## Rough API Docs
+```
+Connect to ws://127.0.0.1:7070
+-> {
+  phrase: "start of interaction"
+}
+<- {
+  id: "interaction id",
+  // rest of response
+}
+-> {
+  id: "interaction id",
+  phrase: "next step of interaction"
+}
+```
+
 ## License
 Copyright (c) 2015 Ryan Gaus (1egoman)
 

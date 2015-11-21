@@ -22,6 +22,7 @@ module.exports = class Interaction extends EventEmitter
   constructor: (opts={debug: true})->
     @id = uuid.v4()
     @intents = []
+    @ws = opts.ws or null
 
     # TODO pull this in from a device
     @remote =

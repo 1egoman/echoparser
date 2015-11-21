@@ -1,0 +1,47 @@
+calendar.listUpcomingEvents
+  what is happening today
+  events today
+  what am I doing today
+  doing today
+  events doing today
+  what is happining today?
+  what am i doing today
+  what am i doing
+  events today
+  my events for today
+  what events am i doing today
+  what events am i doing
+  schedule for my day
+  how does my day look
+  my day
+  events today
+  how does my day look
+  how's my day look
+  events today limit {quantity}
+  ---
+  quantity: Number
+
+calendar.addEvent
+  add {event} to my calendar
+  add {event} to calendar
+  add to calendar
+  add to calendar {event}
+  add {event} to calendar {time}
+  add {event} to calendar at {time}
+  add to calendar {event} {time}
+  add a new event
+  add a new event named {event}
+  add a new event named {event} at {time}
+  new event named {event} at {time}
+  new event named {event}
+  new event {event}
+  new event {event}
+  add new event named {event} at {time}
+  add new event named {event}
+  add new event {event}
+  add new event {event}
+  ---
+  event: String
+  time: When
+
+
