@@ -1,4 +1,4 @@
-
+_ = require "underscore"
 EchoLib = require "./echo_lib"
 
 # library for managing interactions with user
