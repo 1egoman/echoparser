@@ -1,0 +1,8 @@
+lono.zoneState
+  turn {action} zone {n}
+  turn {action} lono zone {n}
+  lono, turn {action} {n}
+  lono turn {action} {n}
+  ---
+  n: Number
+  action: String
