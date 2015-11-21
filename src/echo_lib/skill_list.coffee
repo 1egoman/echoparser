@@ -4,6 +4,7 @@ async = require "async"
 request = require "request"
 {EventEmitter} = require "events"
 Promise = require "promise"
+chalk = require "chalk"
 
 class SkillList extends EventEmitter
 
@@ -19,7 +20,18 @@ class SkillList extends EventEmitter
         @emit "error", err
       else
         async.map skill_files.filter((f) -> f[0] isnt '.'), (skill, cb) =>
-          fs.readFile path.join(@skills_location, skill), "UTF8", (err, data) =>
+          skill_path = path.join @skills_location, skill
+          skill_name = skill.replace(/\.[a-zA-Z]+/g, '')
+          intent_path = path.resolve("src", "intent_handlers", skill_name)
+
+          # does the intent path exist?
+          # if not, let the user know
+          try
+            require intent_path
+          catch
+            console.warn chalk.yellow("-> Umm, no code behind `#{skill}` Add something to `intent_handlers`!")
+
+          fs.readFile skill_path, "UTF8", (err, data) =>
             if err
               cb err
             else
