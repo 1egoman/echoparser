@@ -113,7 +113,14 @@ exports.continue_interaction = (req, res) ->
         intent_module = get_intent_fn match_skill
         intent_module interaction, match_skill
       else
-        # send the intent to the interaction
-        interaction.emit "intent", match_skill
+        if match_skill
+          # send the intent to the interaction
+          interaction.emit "intent", match_skill
+        else
+          # or, if there's no intent, send the raw data
+          interaction.emit "intent",
+            name: "raw"
+            raw: req.body.phrase
+            data: {}
 
 
