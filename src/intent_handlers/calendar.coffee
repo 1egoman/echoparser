@@ -19,8 +19,8 @@ oauth = exports.oauth =
   init: (redirect_uri) ->
     @auth = new googleAuth
     @oauth2 = new @auth.OAuth2(
-      process.argv.GOOGLE_APP_CLIENTID,
-      process.argv.GOOGLE_APP_SECRET,
+      process.env.GOOGLE_APP_CLIENTID,
+      process.env.GOOGLE_APP_SECRET,
       redirect_uri
     )
 
@@ -76,43 +76,55 @@ exports.listUpcomingEvents = (interaction, intent) ->
         else
           interaction.form_response false, "No events for the next day are on your calendar.", true
   else
-    interaction.form_response false ,"Please give me permission to access Google Calendar.", true
+    interaction.form_response false ,"Please give me permission to access Google Calendar!", true
 
 
 
 # add a new event to the calendar
 exports.addEvent = (interaction, intent) ->
   if oauth.token
+    calendar = google.calendar('v3')
 
-    requesting = false
-    event_info =
-      name: intent.data.event,
-      when: intent.data.time
+    # calculate when the event will end
+    end = moment(intent.data.start).add(10, "minutes").toDate()
+    event = {
+      'summary': intent.data.event
+      'description': '(quick-add via echoparser)',
+      'start': {
+        'dateTime': intent.data.start.toISOString(),
+        'timeZone': 'America/New_York',
+      },
+      'end': {
+        'dateTime': end,
+        'timeZone': 'America/New_York',
+      },
+      'attendees': [],
+      'reminders': { 'useDefault': true }
+    }
 
-    # get more info for the event if we've got nothing
-    get_more_info = (err, intent) ->
-      console.log(1)
+    calendar.events.insert {
+      auth: oauth.oauth2
 
-      if requesting
-        event_info[requesting] = intent.raw
+      calendarId: intent.data.calendar or 'primary'
+      resource: event
+    }, (err, response) ->
+      if err
+        console.log(err)
+        interaction.form_response true, "Google Calendar returned an error: #{err}", true
       else
-        event_info.name or= intent.data.event
-        event_info.when or= intent.data.time
+        console.log(response)
+        interaction.raw_response
+          outputSpeach:
+            type: "PlainText"
+            text: "Event '#{intent.data.event}' added."
 
-      if not event_info.name
-        interaction.form_response false, "What is the name of this event?"
-        requesting = "name"
-        interaction.await_response {}, get_more_info
-        return
+          # pass content to the response so it can be opened somewhere else
+          outputContent: [
+            type: "WebLink",
+            data: response.htmlLink
+          ]
 
-      else if not event_info.when
-        interaction.form_response false, "When will this event happen?"
-        requesting = "when"
-        interaction.await_response {}, get_more_info
-        return
+          shouldEndSession: true
 
-      else
-        # ok, we're good!
-        interaction.form_response false, "Created event", true
-
-    get_more_info null, intent
+  else
+    interaction.form_response false ,"Please give me permission to access Google Calendar!", true

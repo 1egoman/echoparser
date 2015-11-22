@@ -26,23 +26,26 @@ calendar.addEvent
   add {event} to calendar
   add to calendar
   add to calendar {event}
-  add {event} to calendar {time}
-  add {event} to calendar at {time}
-  add to calendar {event} {time}
+  add {event} to calendar {start}
+  add {event} to calendar at {start}
+  add to calendar {event} {start}
   add a new event
   add a new event named {event}
-  add a new event named {event} at {time}
-  new event named {event} at {time}
+  add a new event named {event} at {start}
+  new event named {event} at {start}
   new event named {event}
   new event {event}
   new event {event}
-  add new event named {event} at {time}
+  add new event named {event} at {start}
+  add new event named {event} at {start} for {duration}
   add new event named {event}
   add new event {event}
   add new event {event}
   add event
+  add {event} to my calendar for {start}
   ---
   event: String
-  time: When
+  start: When
+  duration: When
 
 
