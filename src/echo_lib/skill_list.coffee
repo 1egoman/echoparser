@@ -105,9 +105,23 @@ class SkillList extends EventEmitter
           current_intent.utterances.push utterance
 
         # a template
-        when in_templ is true and match = ln.match /[ ]+(.*): ?(.*)/
-          [_whole, name, type] = match
-          current_intent.templ[name] = type: type
+        when in_templ is true and match = ln.match /[ ]+([\w]+): ?([a-zA-Z]+)(?:[ ,]+([^\r\n]+))?/
+          [_whole, name, type, metadata] = match
+
+          # add the curly braces around the metadata json if needed
+          metadata = "{#{metadata}}" if metadata and metadata[0] isnt '{'
+
+          # try to parse the metadata
+          try
+            parse_meta = JSON.parse(metadata)
+          catch
+            current_intent.templ[name] = type: type
+            break
+
+          # otherwise, add the metadata in too
+          current_intent.templ[name] =
+            type: type
+            metadata: parse_meta
 
     _skills
 
