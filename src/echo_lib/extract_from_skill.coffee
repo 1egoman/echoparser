@@ -73,6 +73,22 @@ module.exports = (text, skill, callback) ->
           done null
       , (err) ->
 
+        # validate metadata guards
+        for k, v of data
+          if int.templ[k].metadata
+
+            # check to make sure that all `is_required` properies are in the data
+            # example: "is_required": true
+            if int.templ[k].metadata.is_required and data[k] is undefined
+              return callback null
+
+            # does each data element tested follow the specified format
+            # example: "is_format": "[\w]+"
+            if format = int.templ[k].metadata.is_format
+              format_regex = new RegExp(format)
+              r = format_regex.exec(v)
+              return callback null if not r
+
         callback
           # send it out
           name: int.intent

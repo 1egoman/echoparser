@@ -44,8 +44,8 @@ calendar.addEvent
   add event
   add {event} to my calendar for {start}
   ---
-  event: String, "is_required": true
-  start: When
+  event: String, "is_required": true, "is_format": "^[\\w]+$"
+  start: When,   "is_required": true
   duration: When
 
 

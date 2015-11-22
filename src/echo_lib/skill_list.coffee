@@ -112,11 +112,11 @@ class SkillList extends EventEmitter
           metadata = "{#{metadata}}" if metadata and metadata[0] isnt '{'
 
           # try to parse the metadata
-          try
-            parse_meta = JSON.parse(metadata)
-          catch
-            current_intent.templ[name] = type: type
-            break
+          parse_meta = undefined
+          if metadata
+            try
+              parse_meta = JSON.parse(metadata)
+            catch
 
           # otherwise, add the metadata in too
           current_intent.templ[name] =

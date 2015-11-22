@@ -112,7 +112,6 @@ exports.addEvent = (interaction, intent) ->
         console.log(err)
         interaction.form_response true, "Google Calendar returned an error: #{err}", true
       else
-        console.log(response)
         interaction.raw_response
           outputSpeach:
             type: "PlainText"
