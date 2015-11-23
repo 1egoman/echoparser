@@ -24,6 +24,7 @@ calendar.listUpcomingEvents
 calendar.addEvent
   new event {event} at {start}
   add {event} to my calendar for {start}
+  add {event} to my calendar at {start}
   add {event} to my calendar
   add {event} to calendar
   add to calendar {event} at {start}
@@ -41,7 +42,7 @@ calendar.addEvent
   new event {event}
   ---
   event: String, "is_required": true, "is_format": "^[\\w ]+$"
-  start: When,   "is_required": true
+  start: When, "is_required": true
   duration: When
 
 
