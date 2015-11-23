@@ -24,6 +24,7 @@ calendar.listUpcomingEvents
 calendar.addEvent
   new event {event} at {start}
   add {event} to my calendar for {start}
+  add {event} to my calendar at {start}
   add {event} to my calendar
   add {event} to calendar
   add to calendar {event} at {start}
