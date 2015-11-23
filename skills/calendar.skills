@@ -26,7 +26,7 @@ calendar.addEvent
   add {event} to my calendar for {start}
   add {event} to my calendar
   add {event} to calendar
-  add to calendar {event}
+  add to calendar {event} at {start}
   add {event} to calendar {start}
   add {event} to calendar at {start}
   add to calendar {event} {start}

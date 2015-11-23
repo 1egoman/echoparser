@@ -86,7 +86,7 @@ exports.addEvent = (interaction, intent) ->
     calendar = google.calendar('v3')
 
     # calculate when the event will end
-    end = moment(intent.data.start).add(10, "minutes").toDate()
+    end = moment(intent.data.start).add(intent.data.duration or 10, "minutes").toDate()
     event = {
       'summary': intent.data.event
       'description': '(quick-add via echoparser)',
