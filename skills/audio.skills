@@ -11,6 +11,17 @@ audio.playPodcastName
   play a program named {name}
   play a program called {name}
   play a program titled {name}
+  play podcast {name}
+  play the podcast {name}
+  play podcast {name}
+  play the podcast {name}
+  play a podcast {name}
+  play a podcast named {name}
+  play a podcast called {name}
+  play a podcast titled {name}
+  play a podcast named {name}
+  play a podcast called {name}
+  play a podcast titled {name}
   ---
   name: String
 
