@@ -119,9 +119,13 @@ class SkillList extends EventEmitter
             catch
 
           # otherwise, add the metadata in too
-          current_intent.templ[name] =
-            type: type
-            metadata: parse_meta
+          if parse_meta
+            current_intent.templ[name] =
+              type: type
+              metadata: parse_meta
+          else
+            current_intent.templ[name] =
+              type: type
 
     _skills
 
