@@ -41,7 +41,6 @@ filter_expired = (interactions) ->
 
     # the interaction hasn't progressed passed the threshhold for old intents
     is_old = old_intent.datestamp.getTime() + EXPIRED_INTENT_TIME < current_time
-    console.log(is_old, old_intent.datestamp)
     i.end_response() if is_old
 
     not is_old
