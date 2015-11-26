@@ -46,7 +46,7 @@ module.exports = class Interaction extends EventEmitter
 
       # check for new metadata in the request, and add it to the interaction if
       # possible
-      if intent.metadata
+      if intent and intent.metadata
         @metadata = _.extend(@metadata, intent.metadata)
 
     @DEBUG = opts.debug
