@@ -9,6 +9,9 @@ Interaction = require "./interaction"
 SkillsList = require "./echo_lib/skill_list"
 skills_emitter = new SkillsList
 
+# how much time makes an intent expired?
+EXPIRED_INTENT_TIME = 60 * 1000 # 60 seconds
+
 # a list of all interactions happening
 exports.interaction_container = []
 
@@ -28,9 +31,29 @@ get_intent_fn = (match_skill) ->
     null
 
 
+# filter new interactions and pull out the expired ones
+# if a user leaves us hanging, then just stop the request
+filter_expired = (interactions) ->
+  current_time = new Date().getTime()
+  interactions.filter((i) ->
+    # get the datestamp that is the furthest back in time
+    old_intent = _.max(i.intents, (j) -> j.datestamp)
+
+    # the interaction hasn't progressed passed the threshhold for old intents
+    is_old = old_intent.datestamp.getTime() + EXPIRED_INTENT_TIME < current_time
+    console.log(is_old, old_intent.datestamp)
+    i.end_response() if is_old
+
+    not is_old
+     
+  )
+
+
 
 # create a new interaction
 exports.new_interaction = (req, res) ->
+  # filter out old interactions
+  exports.interaction_container = filter_expired exports.interaction_container
 
   # pull in latest skills
   skills_emitter.pull()
@@ -78,6 +101,9 @@ exports.new_interaction = (req, res) ->
 
 # add onto an existing interaction
 exports.continue_interaction = (req, res) ->
+
+  # filter out old interactions
+  exports.interaction_container = filter_expired exports.interaction_container
 
   # pull in latest skills
   skills_emitter.pull()
