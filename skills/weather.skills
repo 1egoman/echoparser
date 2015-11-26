@@ -1,13 +1,4 @@
 
-weather.getWeatherForCurrentLocationNow
-  weather here
-  weather for this place
-  weather now
-  weather right now
-  weather
-  weather forecast
-  ---
-
 weather.getRainForLocationNow
   rain in {place}
   rain {place}
@@ -36,6 +27,12 @@ weather.getWeatherForLocationNow
   what is the weather in {place}
   the weather in {place}
   weather {place}
+  weather here
+  weather for this place
+  weather now
+  weather right now
+  weather
+  weather forecast
   ---
   place: Place
 

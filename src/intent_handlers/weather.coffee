@@ -1,6 +1,7 @@
 Promise = require "promise"
 Forecast = require "forecast.io"
 _ = require "underscore"
+moment = require "moment"
 
 # remove all returns in a string 
 strip_n = (a) -> a.replace /[\n]/g, ''
@@ -31,9 +32,6 @@ resolve_forecast = (weather, time, resolution) ->
     conditions = conditions.data[deltas.indexOf(contitions_timestamp)]
 
   conditions
-
-
-
 
 # this function abstracts all of the weather logic into a seperate container
 get_weather_at = (time, resolution, response) ->
@@ -74,7 +72,3 @@ exports.getRainForLocationNow = get_weather_at new Date, "hourly", (conditions, 
   """There is currently a 
   #{Math.floor conditions.precipProbability * 100} percent chance of precipitation
   #{place.formatted and " in "+place.formatted or ''}."""
-
-
-exports.getWeatherForCurrentLocationNow = (interaction, intent) ->
-  interaction.form_response false, "Work in progress."
