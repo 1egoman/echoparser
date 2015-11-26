@@ -66,6 +66,7 @@ exports.new_interaction = (req, res) ->
       interaction = new Interaction
         ws: req.webSocketConn
         debug: true
+        metadata: req.body.metadata # include any metadata sent in the request
       exports.interaction_container.push interaction
       interaction.emit "intent", match_skill
 

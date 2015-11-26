@@ -13,7 +13,7 @@ get_conditions_at = (coords) ->
         APIKey: process.env.FORECASTIO_APP_API_KEY
         timeout: 1000
 
-      forecast.get coords.lat, coords.lng, (err, res, data) ->
+      forecast.get coords.geo.lat, coords.geo.lng, (err, res, data) ->
         if err
           reject err
         else
@@ -38,7 +38,17 @@ resolve_forecast = (weather, time, resolution) ->
 # this function abstracts all of the weather logic into a seperate container
 get_weather_at = (time, resolution, response) ->
   (interaction, intent) ->
-    get_conditions_at intent.data.place.geo
+
+    # get the user's position
+    # try to pull from the query, but fall back on request metadata
+    if intent.data.place
+      pos_of_user = intent.data.place
+    else if interaction.metadata.geo
+      pos_of_user = interaction.metadata.geo
+    else
+      return interaction.form_response true, "You never said where you were?", true
+
+    get_conditions_at pos_of_user
     .then (weather) ->
 
       # override the time if it is falsey
@@ -48,7 +58,7 @@ get_weather_at = (time, resolution, response) ->
       conditions = resolve_forecast weather, time, resolution
 
       # format the forecast
-      interaction.form_response false, strip_n(response(conditions, intent)), true
+      interaction.form_response false, strip_n(response(conditions, intent, pos_of_user)), true
 
     # error?
     .catch (error) ->
@@ -56,14 +66,15 @@ get_weather_at = (time, resolution, response) ->
 
 
 # "It is 50 degrees and partly cloudy in New York."
-exports.getWeatherForLocationNow = get_weather_at new Date, "hourly", (conditions, intent) ->
+exports.getWeatherForLocationNow = get_weather_at new Date, "hourly", (conditions, intent, place) ->
     """It is currently #{conditions.temperature} degrees 
-    and #{conditions.summary} in #{intent.data.place.formatted}."""
+    and #{conditions.summary}#{place.formatted and " in "+place.formatted or ''}."""
 
-exports.getRainForLocationNow = get_weather_at new Date, "hourly", (conditions, intent) ->
+exports.getRainForLocationNow = get_weather_at new Date, "hourly", (conditions, intent, place) ->
   """There is currently a 
-  #{conditions.precipProbability * 100} percent chance of precipitation 
-  in #{intent.data.place.formatted}."""
+  #{Math.floor conditions.precipProbability * 100} percent chance of precipitation
+  #{place.formatted and " in "+place.formatted or ''}."""
+
 
 exports.getWeatherForCurrentLocationNow = (interaction, intent) ->
   interaction.form_response false, "Work in progress."

@@ -5,6 +5,24 @@ $(document).ready(function() {
 // websockets on port :7070 be default
 ws = new WebSocket(location.href.replace(":7000", ":7070").replace("http://", "ws://"))
 
+// prompt user to get geolocation permission
+ask_for_geo = function() {
+  return new Promise(function(resolve, reject){
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(pos) {
+        resolve({
+          geo: {
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude,
+          },
+        });
+      }, reject, {
+        enableHighAccuracy: true,
+        timeout: 2000
+      });
+    }
+  })
+}
 
 // listen for a websocket response
 ws.onmessage = function(evt) {
@@ -44,10 +62,16 @@ var query = function(phrase, store) {
 
   // query the server
   if (ws.readyState === 1) {
-    ws.send(JSON.stringify({
-      id: interactionId ? interactionId : undefined,
-      phrase: phrase
-    }))
+    ask_for_geo().then(function(pos) {
+      console.log(pos)
+      ws.send(JSON.stringify({
+        id: interactionId ? interactionId : undefined,
+        phrase: phrase,
+        metadata: {
+          geo: pos
+        }
+      }))
+    });
   } else {
     // reload the app so it will reconnect
     location.reload()

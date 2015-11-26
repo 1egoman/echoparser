@@ -25,6 +25,7 @@ weather.getRainForLocationNow
   umbrella at {place}
   umbrella in {place}
   umbrella {place}
+  is it raining
   ---
   place: Place
 

@@ -19,7 +19,7 @@ wolfram = require("wolfram").createClient process.env.WOLFRAM_APP_KEY
 # ------------------------------------------------------------------------------
 module.exports = class Interaction extends EventEmitter
 
-  constructor: (opts={debug: true})->
+  constructor: (opts={debug: true, metadata: null})->
     @id = uuid.v4()
     @intents = []
     @ws = opts.ws or null
@@ -28,6 +28,9 @@ module.exports = class Interaction extends EventEmitter
     @remote =
       playlist: []
       state: {}
+
+    # request metadata
+    @metadata = opts.metadata or {}
 
     @on "intent_response", (intent) ->
       @intents.push
@@ -40,6 +43,11 @@ module.exports = class Interaction extends EventEmitter
         direction: "incoming"
         datestamp: new Date()
         intent: intent
+
+      # check for new metadata in the request, and add it to the interaction if
+      # possible
+      if intent.metadata
+        @metadata = _.extend(@metadata, intent.metadata)
 
     @DEBUG = opts.debug
 
