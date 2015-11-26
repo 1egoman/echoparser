@@ -36,3 +36,18 @@ weather.getWeatherForLocationNow
   ---
   place: Place
 
+weather.getBla
+  get bla
+  ---
+
+weather.getWindspeedForLocationNow
+  get windspeed
+  ---
+
+weather.getSunriseTime
+  get sunrise
+  ---
+
+weather.getSunsetTime
+  get sunrise
+  ---
