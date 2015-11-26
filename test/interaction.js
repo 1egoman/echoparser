@@ -37,6 +37,77 @@ describe('Interaction', function() {
 
   });
 
+// ------------------------------------------------------------------------------
+// Metadata
+// In a new interaction, make sure that metadata is inherited.
+// ------------------------------------------------------------------------------
+  describe('metadata', function() {
+    _this = this
+
+    // create a new interaction
+    before(function() {
+      _this.interaction = new Interaction({
+        debug: false,
+
+        // this is what we are testing
+        metadata: {
+          foo: "bar",
+          nested: {
+            another: "key",
+            hello: "world",
+            number: 1
+          }
+        }
+      })
+    })
+
+    // remove all listeners between each test
+    beforeEach(function() {
+      _this.interaction.removeAllListeners("intent_response")
+    })
+
+    it('new interaction should contain the specified metadata', function(done) {
+      assert.deepEqual(_this.interaction.metadata, {
+        foo: "bar",
+        nested: {
+          another: "key",
+          hello: "world",
+          number: 1
+        }
+      })
+      done()
+    })
+
+    it('amend to metadata', function(done) {
+      // our incoming response
+      intent = {
+        metadata: {
+          baz: "test data"
+        }
+      }
+
+      _this.interaction.await_response({}, function(err, risen_intent) {
+        assert.equal(err, null)
+        assert.deepEqual(_this.interaction.metadata, {
+          foo: "bar",
+          baz: "test data", // our added key
+          nested: {
+            another: "key",
+            hello: "world",
+            number: 1
+          }
+        })
+        done()
+      })
+
+      // pretend to be an incoming request from a user
+      _this.interaction.emit("intent", intent)
+    })
+
+
+
+  })
+
 
 
 // ------------------------------------------------------------------------------
