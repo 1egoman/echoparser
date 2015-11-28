@@ -3,6 +3,7 @@ path = require "path"
 express = require("express")
 app = express()
 bodyParser = require "body-parser"
+async = require "async"
 app.use bodyParser.json()
 PORT = process.env.PORT or 7000
 
@@ -26,29 +27,38 @@ app.post "/api/v1/intent/:id", continue_interaction
 app.get "/oauth", (req, res) ->
   oauth_helper.get_oauth_clients()
   .then (intents) ->
-    intent_markup = intents.map (i) ->
+
+    # map through each oauth client and render it
+    async.map intents, (i, done) ->
       if i.token
-        """
+        done null, """
         <li>
           <strong>#{i.name}</strong>
           <span>#{JSON.stringify(i.token, null, 2)}</span>
         </li>
         """
       else
-        """
-        <li>
-          <strong>#{i.name}</strong>
-          <a href="#{i.module.redirectUserTo()}">Register</a>
-        </li>
-        """
+        i.module.redirectUserTo (err, redirect) ->
+          done err, """
+          <li>
+            <strong>#{i.name}</strong>
+            <a href="#{redirect}">Register</a>
+          </li>
+          """
 
-
-    res.send """
-    <h1>OAuth Permissions</h1>
-    <ul>
-      #{intent_markup.join('')}
-    </ul>
-    """
+    , (err, intent_markup) ->
+      if err
+        res.send """
+        <h1>OAuth Permissions</h1>
+        <strong>Error</strong>: #{err.toString()}
+        """
+      else
+        res.send """
+        <h1>OAuth Permissions</h1>
+        <ul>
+          #{intent_markup.join('')}
+        </ul>
+        """
 
 app.get "/oauth/callback/:name", oauth_helper.register_token
 
