@@ -7,7 +7,6 @@ TWITTER_APP_CONSUMER_KEY = "bdhW2HyVRjwTr8eF1z6xG2Fww"
 TWITTER_APP_CONSUMER_SECRET = "Tw90iWhUlb41YtimB1dXL6jnihX5PtxZx8kAdypOc5DW6hfjG6"
  
 oauth = exports.oauth =
-
   init: (redirect_uri) ->
     @auth = {} # reset stored auth
     @oauth = new OAuth(
@@ -74,6 +73,9 @@ exports.sendTweet = (interaction, intent) ->
   interaction.form_response false, "Tweet '#{params.status}'?"
   interaction.await_response {}, (err, intent_response) ->
     if intent_response.name is "responses.yes"
+
+      # trim to 140 chars because twitter...
+      params.status = params.status.toString().slice(0, 140)
 
       # post the tweet
       oauth.makeTwitterClient().post 'statuses/update', params, (error, tweet_str, response) ->
