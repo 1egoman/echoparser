@@ -36,18 +36,38 @@ weather.getWeatherForLocationNow
   ---
   place: Place
 
-weather.getBla
-  get bla
-  ---
-
 weather.getWindspeedForLocationNow
-  get windspeed
+  wind
+  wind speed
+  get the windspeed
+  what is the wind speed
+  wind miles per hour
+  wind get speed
+  wind direction
+  get wind direction
+  what is the wind direction
+  how fast is the wind
   ---
 
 weather.getSunriseTime
-  get sunrise
+  get sunset
+  when does the sun rise
+  when did the sun rise
+  when will the sun rise
+  sunrise time
+  time sun rises
+  sunrise
+  sun rise
   ---
 
 weather.getSunsetTime
-  get sunrise
+  get sunset
+  when does the sun set
+  when did the sun set
+  when will the sun set
+  sunset time
+  time sun sets
+  time sun set
+  sunset
+  sun set
   ---
