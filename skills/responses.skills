@@ -4,6 +4,20 @@ responses.yes
   true
   acknowlege
   yep
+  affirmative
+  amen
+  fine
+  good
+  okay
+  yea
+  aye
+  definitely
+  exactly
+  gladly
+  good enough
+  surely
+  of course
+  precisely
   ---
 
 responses.no
@@ -11,6 +25,11 @@ responses.no
   nope
   not
   never
+  no thanks
+  yea no
+  yes no
+  yea...no
+  yea... no
   ---
 
 responses.slice

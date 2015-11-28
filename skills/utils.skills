@@ -8,6 +8,10 @@ utils.stop
   end
   quit
   shut up
+  forget it
+  never mind
+  nevermind
+  go away
   ---
 
 utils.repeat
@@ -23,6 +27,9 @@ utils.repeat
   redo
   say again
   repeat yourself
+  renew
+  rehash
+  re-do
   ---
 
 utils.setVolumeAbsolute
