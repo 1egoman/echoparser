@@ -75,7 +75,7 @@ module.exports = (text, skill, callback) ->
 
         # validate metadata guards
         for k, v of data
-          if int.templ[k].metadata
+          if int.templ[k] and int.templ[k].metadata
 
             # check to make sure that all `is_required` properies are in the data
             # example: "is_required": true
