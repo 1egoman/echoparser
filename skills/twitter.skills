@@ -1,0 +1,21 @@
+twitter.getTwitterTimeline
+  twitter
+  twitter timeline
+  get my twitter timeline
+  twitter news
+  news twitter
+  news on twiter
+  what's on my twitter timeline
+  what is on my twitter timeline
+  what is on twitter
+  what's on twitter
+  ---
+
+twitter.sendTweet
+  send a tweet {body}
+  send tweet {body}
+  tweet {body}
+  twiter send a tweet {body}
+  update twitter status {body}
+  ---
+  body: String

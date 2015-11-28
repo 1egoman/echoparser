@@ -58,6 +58,7 @@ app.get "/oauth", (req, res) ->
         <ul>
           #{intent_markup.join('')}
         </ul>
+        <small>Make sure that you refresh the page and click the register link in the same server instance!</small>
         """
 
 app.get "/oauth/callback/:name", oauth_helper.register_token
