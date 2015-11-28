@@ -81,24 +81,28 @@ exports.sendTweet = (interaction, intent) ->
       oauth.makeTwitterClient().post 'statuses/update', params, (error, tweet_str, response) ->
         console.log(error, tweet)
 
-        # parse the return to json
-        try
-          tweet = JSON.parse(tweet_str)
-        catch e
-          return interaction.form_response e, "Twitter didn't return valid JSON?", true
+        if error
+          interaction.form_response error, "Twitter returned an error: #{JSON.stringify(error)}", true
+        else
 
-        interaction.raw_response
-          outputSpeach:
-            type: "PlainText"
-            text: "The tweet was posted."
+          # parse the return to json
+          try
+            tweet = JSON.parse(tweet_str)
+          catch e
+            return interaction.form_response e, "Twitter didn't return valid JSON?", true
 
-          # pass content to the response so it can be opened somewhere else
-          outputContent: [
-            type: "WebLink",
-            data: "https://twitter.com/#{tweet.user.screen_name}/status/#{tweet.id_str}"
-          ]
+          interaction.raw_response
+            outputSpeach:
+              type: "PlainText"
+              text: "The tweet was posted."
 
-          shouldEndSession: true
+            # pass content to the response so it can be opened somewhere else
+            outputContent: [
+              type: "WebLink",
+              data: "https://twitter.com/#{tweet.user.screen_name}/status/#{tweet.id_str}"
+            ]
+
+            shouldEndSession: true
 
     else
       interaction.end_response()
