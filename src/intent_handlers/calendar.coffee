@@ -30,8 +30,8 @@ oauth = exports.oauth =
   getName: -> "Google Calendar"
 
   # where to redirect the user to for the first step of oauth
-  redirectUserTo: ->
-    @oauth2.generateAuthUrl
+  redirectUserTo: (done) ->
+    done null, @oauth2.generateAuthUrl
       access_type: 'offline',
       scope: SCOPES
 
