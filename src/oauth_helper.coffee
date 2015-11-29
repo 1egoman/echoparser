@@ -1,3 +1,28 @@
+# ------------------------------------------------------------------------------
+# oauth_helper.coffee
+# This file manages the auth functionality through auth strategies such as
+# oauth, oauth2, token-based flows, and anything else can probably be merged
+# in with this module. In general, this helper is used when exports.oauth
+# (`oauth` below) is defined in a skill. Here's a basic workflow:
+# - On the app start, `oauth.init` is run with the oauth/oauth2/something else
+# redirect uri as the first argument. In this place, you should init your auth
+# mechanism, creating instances of whatever classes are needed to continue
+# later. Additionally, you should initialize any auth that has already been
+# set-up that is within `oaauth.token`
+# - At any time, `oauth.getName` may be called to get the display name of your
+# skill in all the oauth prompts. Note this must by synchronous and return a string.
+# - When the user is authenticating, `oauth.redirectUserTo` is called, and in the
+# callback passed (the first argument) a proper node-style callback will be returned
+# containing the redirect url for your authentication scheme, as a string.
+# - Next, once the oauth callback provided in the first bullet has ben called,
+# `oauth.getToken` will be called with the `req` from the query passed. A promise
+# should be returned that resolves the auth details to be saved.
+# - Lastly, the saved auth details will be available in `oauth.token` and will be
+# parsistantly available across restarts of the app. 
+#
+# Check out examples in `calendar` and `twitter`!
+# ------------------------------------------------------------------------------
+
 fs = require "fs"
 path = require "path"
 Promise = require "promise"
