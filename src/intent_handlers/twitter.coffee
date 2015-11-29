@@ -65,7 +65,6 @@ oauth = exports.oauth =
         @token.access_token_secret
       )
 
-
 exports.sendTweet = (interaction, intent) ->
   params = {
     status: intent.data.body,

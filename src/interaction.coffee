@@ -128,9 +128,13 @@ module.exports = class Interaction extends EventEmitter
         # just send the data back to the user
         callback err, parse_wolfram_results(result), result
       else if not err
-        @form_response true, parse_wolfram_results(result), end_session
+        # make sure we have something to respond with
+        if parsed_results = parse_wolfram_results(result)
+          @form_response false, parsed_results, end_session
+        else
+          @form_response false, "Hmm, we don't know what you said; Sorry!", end_session
       else
-        @form_response true, "Wolfram Alpha errored: #{err}", end_session
+        @form_response false, "Wolfram Alpha errored: #{err}", end_session
 
 
   # ----------------------------------------------------------------------------
