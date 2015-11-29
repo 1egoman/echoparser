@@ -76,6 +76,9 @@ exports.sendTweet = (interaction, intent) ->
       # trim to 140 chars because twitter...
       params.status = params.status.toString().slice(0, 140)
 
+      # capitalize the first letter of the tweet because grammer
+      params.status = params.status[0].toUpperCase() + params.status.slice(1)
+
       # post the tweet
       oauth.makeTwitterClient().post 'statuses/update', params, (error, tweet_str, response) ->
         console.log(error, tweet)
