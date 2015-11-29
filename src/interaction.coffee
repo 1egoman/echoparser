@@ -30,7 +30,9 @@ module.exports = class Interaction extends EventEmitter
       state: {}
 
     # request metadata
+    # also, override some default properties that will always be set
     @metadata = opts.metadata or {}
+    @metadata.capabilities = @metadata.capabilities or []
 
     @on "intent_response", (intent) ->
       @intents.push

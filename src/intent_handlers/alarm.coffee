@@ -1,24 +1,46 @@
 moment = require "moment"
 
 # the user sets an alarm / timer
-# TODO this won't work until remote stuff is persisted across interactions
+# if the device can do its own alarm (specified in request metadata)
+# then let it, otherwise just send an additional request later to "trigger"
+# the alarm
 exports.setAlarm = exports.setTimer = (interaction, intent) ->
-  interaction.form_response false, "Setting alarm for #{moment(intent.data.time).format('MMMM Do [at] h:mm a')}.", true
+  alarm_msg = "Setting alarm for #{moment(intent.data.time).format('MMMM Do [at] h:mm a')}."
 
-  # set a timeout and wait those seconds
-  setTimeout ->
-    # update the ringing state
+  # the system has something that can handle an alarm attached
+  if "doesLocalAlarm" in interaction.metadata.capabilities
     interaction.raw_response
-      events: [
-        name: "alarm.ring"
-        data:
-          state: true
+      outputSpeach:
+        type: "PlainText"
+        text: alarm_msg
+
+      # pass alarm data to be handled locally
+      outputContent: [
+        type: "AudioAlarm",
+        data: {
+          triggerAt: intent.data.time.toISOString(),
+          alarmSound: "beep"
+        }
       ]
-  , intent.data.time.getTime() - new Date().getTime()
+
+      shouldEndSession: true
+
+  else
+    interaction.form_response false, alarm_msg, false
+
+    # set a timeout and wait those seconds
+    setTimeout ->
+      # update the ringing state
+      interaction.raw_response
+        events: [
+          name: "alarm.ring"
+          data:
+            state: true
+        ]
+    , intent.data.time.getTime() - new Date().getTime()
 
 
 # snooze the alarm
-# TODO this won't work until remote stuff is persisted across interactions
 exports.snooze = (interaction, intent) ->
   # is alarm on?
   if interaction.remote.state["alarm_ringing"]?.state

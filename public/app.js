@@ -68,7 +68,10 @@ var query = function(phrase, store) {
         id: interactionId ? interactionId : undefined,
         phrase: phrase,
         metadata: {
-          geo: pos
+          geo: pos,
+          capabilities: localStorage.capabilities || [
+            "doesLocalAlarm"
+          ]
         }
       }))
     });
