@@ -12,3 +12,18 @@ joke.getJoke
   a wanna joke
   joke with me
   ---
+
+joke.helloWorld
+  hello world
+  hello, world
+  hello world!
+  hello, world!
+  ---
+
+joke.bestLanguage
+  what is the best programming language
+  best programming language
+  best code language
+  greatest code language
+  greatest programming language
+  ---

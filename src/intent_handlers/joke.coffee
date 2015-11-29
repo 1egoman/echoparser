@@ -9,3 +9,9 @@ jokes = [
 
 exports.getJoke = (interaction, intent) ->
   interaction.form_response false, _.sample(jokes), true
+
+exports.helloWorld = (interaction, intent) ->
+  interaction.form_response false, "Yea, that's what main() { printf(\"Hello, world!\"); } does.", true
+
+exports.bestLanguage = (interaction, intent) ->
+  interaction.form_response false, "Well, I'm a fan of javascript, but to each their own I guess...", true
