@@ -30,15 +30,16 @@ app.get "/oauth", (req, res) ->
 
     # map through each oauth client and render it
     async.map intents, (i, done) ->
-      if i.token
-        done null, """
-        <li>
-          <strong>#{i.name}</strong>
-          <span>#{JSON.stringify(i.token, null, 2)}</span>
-        </li>
-        """
-      else
-        i.module.redirectUserTo (err, redirect) ->
+      i.module.redirectUserTo (err, redirect) ->
+        if i.token
+          done null, """
+          <li>
+            <strong>#{i.name}</strong>
+            <a href="#{redirect}">Re-Register</a>
+            <span>#{JSON.stringify(i.token, null, 2)}</span>
+          </li>
+          """
+        else
           done err, """
           <li>
             <strong>#{i.name}</strong>
