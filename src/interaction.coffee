@@ -182,6 +182,20 @@ module.exports = class Interaction extends EventEmitter
     else
       false
 
+  # ----------------------------------------------------------------------------
+  # Add a debug message to say that something is still to be implemented
+  # ----------------------------------------------------------------------------
+  is_tbd: (status, msg) ->
+    @raw_response
+      outputSpeach:
+        type: "PlainText"
+        text: "This action hasn't been implemented yet." + if msg
+          " #{msg}"
+        else ''
+
+      shouldEndSession: true
+      isNotImplemented: true
+
   # debug logging
   emit: ->
     if @DEBUG

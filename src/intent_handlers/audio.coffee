@@ -115,7 +115,7 @@ exports.playMusicArtist = (interaction, intent) ->
 exports.addToPlaylist = (interaction, intent) ->
   spotify.searchTracks(intent.data.name, limit: 1).then (data) =>
     if data.body.tracks.items.length > 0
-      interaction.form_response false, "Not Implemented. Later, we'll add #{data.body.tracks.items[0].name} to playlist."
+      interaction.is_tbd false, "Later, we'll add #{data.body.tracks.items[0].name} to playlist."
     else
       interaction.form_response false, data
 
@@ -123,7 +123,7 @@ exports.addToPlaylist = (interaction, intent) ->
 exports.playPlaylist = (interaction, intent) ->
   spotify.searchPlaylists(intent.data.playlist).then (data) ->
     if playlist = data.body.playlists.items[0]
-      interaction.form_response false, "Not Implemented. Later, we'll play #{playlist.name}.", true
+      interaction.is_tbd false, "Later, we'll play #{playlist.name}."
     else
       interaction.form_response false, "No such playlist exists", true
 
@@ -185,4 +185,4 @@ exports.whatMusicPlaying = (interaction, intent) ->
     , true
 
   else
-    interaction.form_response false, "Nothing is playing right now."
+    interaction.form_response false, "Nothing is playing right now.", true
