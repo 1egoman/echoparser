@@ -89,7 +89,7 @@ exports.playMusicArtist = (interaction, intent) ->
           artist: t.artists.map((a) => a.name).join ', '
           src: t.preview_url
         interaction.audio_playlist_response true, tracks, \
-          "I've assembled a playlist of #{artist.name}. Play it?"
+          "I've assembled a playlist by #{artist.name}. Play it?"
 
         # wait for the user confirmation
         interaction.await_response {}, (err, response) ->
@@ -100,9 +100,7 @@ exports.playMusicArtist = (interaction, intent) ->
               outputSpeach:
                 type: "PlainText"
                 text: "Ok"
-              actions:
-                "play.media":
-                  state: true
+              outputActions: ["play"],
               shouldEndSession: true
           else
             interaction.end_response()
@@ -147,7 +145,7 @@ exports.playPodcastName = (interaction, intent) ->
           , (err, tracks) =>
             interaction.audio_playlist_response true, tracks, "Play '#{episode.name}' from '#{podcast.name}'?"
 
-            # wait for the user to confirm
+            # wait for the user to confirmy
             interaction.await_response {}, (err, response) ->
 
               # play it
@@ -156,9 +154,7 @@ exports.playPodcastName = (interaction, intent) ->
                   outputSpeach:
                     type: "PlainText"
                     text: "Ok"
-                  actions:
-                    "play.media":
-                      state: true
+                  outputActions: ["play"],
                   shouldEndSession: true
               else
                 interaction.end_response()

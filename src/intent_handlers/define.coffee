@@ -8,5 +8,5 @@ exports.defineWord = (interaction, intent) ->
       i.split('|').map (j) -> j = j.trim()
 
     interaction.form_response false,
-      "a #{intent.data.phrase} could be " + opts.map((i) -> "a #{i[1]}, meaning #{i[2]};").join(' '),
+      "A #{intent.data.phrase} could be " + opts.map((i) -> "a #{i[1]}, meaning #{i[2]}, or").join(' ').replace(/, or$/, '') + ".",
       true

@@ -7,6 +7,12 @@ exports.stop = (interaction, intent) -> interaction.end_response()
 exports.repeat = (interaction, intent) ->
   interaction.raw_response interaction.intents.reverse()[0].intent
 
+# pause any media playing
+exports.pause = (interaction, intent) ->
+  interaction.raw_response
+    actions: ["media.pause"],
+    shouldEndSession: false
+
 # control volume level
 exports.setVolumeRelative = (interaction, intent) ->
   interaction.raw_response

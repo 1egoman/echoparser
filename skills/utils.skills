@@ -32,6 +32,11 @@ utils.repeat
   re-do
   ---
 
+utils.pause
+  pause
+  pause media
+  ---
+
 utils.setVolumeAbsolute
   volume {volume}
   set volume {volume}
