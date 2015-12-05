@@ -63,7 +63,6 @@ var query = function(phrase, store) {
   // query the server
   if (ws.readyState === 1) {
     ask_for_geo().then(function(pos) {
-      console.log(pos)
       ws.send(JSON.stringify({
         id: interactionId ? interactionId : undefined,
         phrase: phrase,
