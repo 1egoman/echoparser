@@ -1,0 +1,5 @@
+define.defineWord
+  what is {phrase}
+  ---
+  phrase: String
+  pos: String

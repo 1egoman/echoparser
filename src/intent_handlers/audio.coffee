@@ -58,7 +58,6 @@ exports.playMusicNameArtist = (interaction, intent) ->
   spotify.searchTracks "track:#{intent.data.name} artist:#{intent.data.artist}",
     limit: 1
   .then (data) ->
-    console.log data
     if tracks = data.body.tracks.items
 
       interaction.form_response false, \
