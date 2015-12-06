@@ -73,7 +73,8 @@ describe('Interaction', function() {
           another: "key",
           hello: "world",
           number: 1
-        }
+        },
+        capabilities: []
       })
       done()
     })
@@ -95,7 +96,8 @@ describe('Interaction', function() {
             another: "key",
             hello: "world",
             number: 1
-          }
+          },
+          capabilities: []
         })
         done()
       })
