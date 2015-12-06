@@ -196,6 +196,17 @@ module.exports = class Interaction extends EventEmitter
       shouldEndSession: true
       isNotImplemented: true
 
+  # ------------------------------------------------------------------------------
+  # Request some Metadata
+  # This query issues a request for a metadata response from the client, to get back pertenant info.
+  # ------------------------------------------------------------------------------
+  request_metadata: (to_request) ->
+    if to_request
+      @raw_response
+        metadataRequest: to_request
+    else
+      null
+
   # debug logging
   emit: ->
     if @DEBUG

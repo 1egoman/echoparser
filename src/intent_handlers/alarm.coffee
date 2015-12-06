@@ -80,3 +80,16 @@ exports.snooze = (interaction, intent) ->
   else
     interaction.form_response false, "No alarm is set.", true
 
+exports.timeRemaining = (interaction, intent) ->
+
+  has_alarm = (err, alarm) ->
+    interaction.form_response \
+      false,
+      "#{moment(alarm.triggerAt).fromNow().replace('ago', '')} left.",
+      true
+
+  if alarm = interaction.metadata.alarm_remaining
+    has_alarm null, alarm
+  else
+    interaction.request_metadata ["alarm_remaining"]
+    interaction.await_response {}, has_alarm

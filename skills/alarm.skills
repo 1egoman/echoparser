@@ -26,3 +26,9 @@ alarm.snooze
   snooze {duration}
   ---
   duration: When
+
+alarm.timeRemaining
+  time left
+  time left in alarm
+  alarm time left
+  ---

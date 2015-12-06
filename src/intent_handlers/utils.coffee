@@ -9,13 +9,9 @@ exports.repeat = (interaction, intent) ->
 
 # pause any media playing
 exports.pause = (interaction, intent) ->
-  console.log(interaction.intents.length)
-  if interaction.intents.length < 2
-    interaction.end_response()
-  else
-    interaction.raw_response
-      actions: ["media.pause"],
-      shouldEndSession: false
+  interaction.raw_response
+    actions: ["media.pause"],
+    shouldEndSession: interaction.intents.length < 2
 
 # control volume level
 exports.setVolumeRelative = (interaction, intent) ->

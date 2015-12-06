@@ -70,7 +70,10 @@ var query = function(phrase, store) {
           geo: pos,
           capabilities: localStorage.capabilities || [
             "doesLocalAlarm"
-          ]
+          ],
+          alarm_remaining: {
+            triggerAt: new Date()
+          }
         }
       }))
     });
