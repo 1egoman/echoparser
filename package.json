@@ -6,7 +6,8 @@
   "scripts": {
     "test": "coffee -c -o dist/ src/ && NODE_ENV=test mocha",
     "start": "coffee src/index.coffee",
-    "coverage": "coffee -c -o dist/ src/ && istanbul cover _mocha -- -R spec"
+    "coverage": "coffee -c -o dist/ src/ && istanbul cover _mocha -- -R spec",
+    "nodemon": "LOG_PATH=logs nodemon src/index.coffee"
   },
   "author": "",
   "license": "MIT",

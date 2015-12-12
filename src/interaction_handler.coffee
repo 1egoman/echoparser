@@ -1,4 +1,6 @@
 _ = require "underscore"
+fs = require "fs"
+path = require "path"
 EchoLib = require "./echo_lib"
 
 # library for managing interactions with user
@@ -73,6 +75,18 @@ exports.new_interaction = (req, res) ->
       # look in intent_handles for the correctly named skill file
       # and then get the intent from inside
       intent_module = get_intent_fn match_skill
+
+      # log the intent added to the interaction
+      if process.env.LOG_PATH and match_skill
+        fs.writeFile(
+          path.resolve(process.env.LOG_PATH, "#{interaction.id}_#{interaction.intents.length}.log"),
+          JSON.stringify({
+            intent: match_skill,
+            issued: new Date().toISOString()
+          }),
+          (err) ->
+            console.log "Couldn't write log file #{interaction.id}: #{err}" if err
+        )
 
       # wait for a response and go with it
       if req.isWs
