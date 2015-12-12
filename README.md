@@ -16,6 +16,13 @@ Still a few unanswered questions though:
 - Direct guests somewhere.
 - Weather/Time/etc...
 - Audio/Music/Podcasts/Radio...
+- Prediction
+  - Use logging to calculate the change from one event to the next to the next
+    etc...
+  - Then, look for trends like [*1, 2, 3*, 4, 77, 3, 2, 5, *1, 2, 3*, 66, 7, 7]
+  - use the stored time metadata to calculate the chance it will happen again
+  - if that change is above a threshold, when the first command is issued
+    around when the trend says do the others too.
 - <https://gist.github.com/1egoman/b1c520670ba565f96421>
 
 ## Rough API Docs
